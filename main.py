@@ -15,6 +15,7 @@ from time import *
 class Dialog(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    test_1_running = False
 
     def __init__(self):
         super(Dialog, self).__init__()
@@ -116,7 +117,7 @@ class Dialog(QDialog):
             info = '测试失败'
             self.test_result.setStyleSheet('''color: black; background-color: red''')
         else:
-            info = ''
+            info = '请开始测试'
             self.test_result.setStyleSheet('''color: black; background-color: gray''')
         self.test_result.setText(info)
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
@@ -127,6 +128,7 @@ class Dialog(QDialog):
         self.bigEditor = QTextEdit()
         self.bigEditor.setPlainText("This widget takes up all the remaining space "
                 "in the top-level layout.")
+        self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
         cursor=self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
@@ -154,10 +156,15 @@ class Dialog(QDialog):
         self.horizontalGroupBox.setLayout(layout)
 
     def auto_test_1(self):
-        print("auto_test_1")
-        self.bigEditor.append("start auto test 1")
-        t = threading.Thread(target=self.test_unit_1)
-        t.start()
+        if Dialog.test_1_running == False:
+            Dialog.test_1_running = True
+            print("auto_test_1")
+            self.bigEditor.append("start auto test 1")
+            t = threading.Thread(target=self.test_unit_1)
+            t.start()
+        else:
+            self.bigEditor.append("test 1 is already running!")
+            pass
 
     def auto_test_2(self):
         print("auto_test_2")
