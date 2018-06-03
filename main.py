@@ -32,8 +32,8 @@ class Dialog(QDialog):
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
-        buttonBox.accepted.connect(self.accept)
-        buttonBox.rejected.connect(self.reject)
+        # buttonBox.accepted.connect(self.accept)
+        # buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
         mainLayout.setMenuBar(self.menuBar)
@@ -54,10 +54,11 @@ class Dialog(QDialog):
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
-        cmd_input = QLineEdit(self)
-        cmd_input.setFont(QFont("Microsoft YaHei", 25))
-        cmd_input.setStyleSheet("color:black")
-        layout.addWidget(cmd_input, 0, 1)
+        self.cmd_input = QLineEdit(self)
+        self.cmd_input.setFont(QFont("Microsoft YaHei", 25))
+        self.cmd_input.setStyleSheet("color:black")
+        self.cmd_input.installEventFilter(self)
+        layout.addWidget(self.cmd_input, 0, 1)
 
         msg = QLabel("请扫描配对命令码")
         msg.setFont(QFont("Microsoft YaHei", 20))
@@ -100,7 +101,7 @@ class Dialog(QDialog):
 
         self.test_result = QLabel(self, text="测试结果")
         self.test_result.setStyleSheet('''color: black; background-color: gray''')
-        info = ''
+        info = '请开始测试'
         self.test_result.setText(info)
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
@@ -155,6 +156,27 @@ class Dialog(QDialog):
         
         self.horizontalGroupBox.setLayout(layout)
 
+    def eventFilter(self, widget, event):
+        if widget == self.cmd_input:
+            if event.type() == QEvent.FocusOut:
+                print("focus out")
+                pass
+            elif event.type() == QEvent.FocusIn:
+                print("focus in")
+            elif event.type() == QEvent.KeyPress:
+                pass
+            elif event.type() == QEvent.KeyRelease:
+                if event.key() == QtCore.Qt.Key_Return:
+                    print("return key release")
+                    msg = self.cmd_input.text()
+                    self.bigEditor.setText(msg)
+                    #self.check_cmd()
+                    # t = threading.Thread(target=self.check_cmd)
+                    # t.start()
+            else:
+                pass
+        return False
+
     def auto_test_1(self):
         if Dialog.test_1_running == False:
             Dialog.test_1_running = True
@@ -183,9 +205,11 @@ class Dialog(QDialog):
     def test_unit_1(self):
         while True:
             print("test_unit_1")
+            self.cmd_input.setText("cmd_start_pair")
             self.bigEditor.append("success")
             self.update_test_resule_show("success")
             sleep(1)
+            self.cmd_input.setText("error cmd input test...")
             self.update_test_resule_show("fail")
             self.bigEditor.append("fail")
             sleep(1)
