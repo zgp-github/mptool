@@ -60,9 +60,9 @@ class Dialog(QDialog):
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 0, 1)
 
-        msg = QLabel("请扫描配对命令码")
-        msg.setFont(QFont("Microsoft YaHei", 20))
-        layout.addWidget(msg, 1, 1)
+        self.msg_show = QLabel("请扫描配对命令码")
+        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
+        layout.addWidget(self.msg_show, 1, 1)
 
         table = QTableWidget(3, 2)
         # auto adapt the width
@@ -110,7 +110,7 @@ class Dialog(QDialog):
         self.formGroupBox.setLayout(layout)
 
     def update_test_resule_show(self, status='None'):
-        print("update_test_resule_show")
+        print("update_test_resule_show: "+status)
         if status == "success":
             info = "测试通过"
             self.test_result.setStyleSheet('''color: black; background-color: green''')
@@ -156,6 +156,17 @@ class Dialog(QDialog):
         
         self.horizontalGroupBox.setLayout(layout)
 
+    def update_msg_show(self, id=None):
+        if id == 1:
+            msg = "请扫描配对命令码"
+        elif id == 2:
+            msg = "请按下传感器的配对按钮"
+        elif id == 3:
+            msg = "命令码错误"
+        else:
+            msg = "请扫描配对命令码"
+        self.msg_show.setText(msg)
+
     def eventFilter(self, widget, event):
         if widget == self.cmd_input:
             if event.type() == QEvent.FocusOut:
@@ -167,9 +178,9 @@ class Dialog(QDialog):
                 pass
             elif event.type() == QEvent.KeyRelease:
                 if event.key() == QtCore.Qt.Key_Return:
-                    print("return key release")
                     msg = self.cmd_input.text()
-                    self.bigEditor.setText(msg)
+                    print("get: "+msg)
+                    self.bigEditor.append(msg)
                     #self.check_cmd()
                     # t = threading.Thread(target=self.check_cmd)
                     # t.start()
@@ -206,13 +217,17 @@ class Dialog(QDialog):
         while True:
             print("test_unit_1")
             self.cmd_input.setText("cmd_start_pair")
+            self.update_msg_show(2)
             self.bigEditor.append("success")
             self.update_test_resule_show("success")
             sleep(1)
             self.cmd_input.setText("error cmd input test...")
+            self.update_msg_show(3)
             self.update_test_resule_show("fail")
             self.bigEditor.append("fail")
             sleep(1)
+            self.cmd_input.clear()
+            self.update_msg_show(1)
             self.update_test_resule_show()
             self.bigEditor.append("no statues")
             sleep(1)
