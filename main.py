@@ -46,9 +46,12 @@ class Dialog(QDialog):
 
     def createMenu(self):
         self.menuBar = QMenuBar()
-        self.fileMenu = QMenu("&File", self)
-        self.exitAction = self.fileMenu.addAction("E&xit")
+        self.fileMenu = QMenu("文件", self)
+        self.exitAction = self.fileMenu.addAction("退出")
+        self.about = QMenu("帮助", self)
+        self.about.addAction("关于")
         self.menuBar.addMenu(self.fileMenu)
+        self.menuBar.addMenu(self.about)
         self.exitAction.triggered.connect(self.accept)
 
     def create_cmd_input(self):
