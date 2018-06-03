@@ -26,14 +26,8 @@ class Dialog(QDialog):
         self.createMenu()
         self.create_cmd_input()
         self.create_test_result_show()
+        self.create_info_show()
         self.create_auto_test()
-
-        self.bigEditor = QTextEdit()
-        self.bigEditor.setPlainText("This widget takes up all the remaining space "
-                "in the top-level layout.")
-        cursor=self.bigEditor.textCursor()
-        cursor.movePosition(QTextCursor.End)
-        self.bigEditor.setTextCursor(cursor)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
@@ -128,6 +122,14 @@ class Dialog(QDialog):
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
         
+    def create_info_show(self):
+        print("info show for the process logs")
+        self.bigEditor = QTextEdit()
+        self.bigEditor.setPlainText("This widget takes up all the remaining space "
+                "in the top-level layout.")
+        cursor=self.bigEditor.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        self.bigEditor.setTextCursor(cursor)
 
     def create_auto_test(self):
         self.horizontalGroupBox = QGroupBox("功能自动测试")
