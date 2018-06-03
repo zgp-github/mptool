@@ -39,7 +39,7 @@ class Dialog(QDialog):
         mainLayout.setMenuBar(self.menuBar)
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.formGroupBox)
-        mainLayout.addWidget(self.bigEditor)
+        mainLayout.addWidget(self.QGroupBox_info_show)
         mainLayout.addWidget(buttonBox)
         mainLayout.addWidget(self.horizontalGroupBox)
         self.setLayout(mainLayout)
@@ -125,14 +125,18 @@ class Dialog(QDialog):
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
         
     def create_info_show(self):
+        self.QGroupBox_info_show = QGroupBox("运行信息")
+        layout = QFormLayout()
         print("info show for the process logs")
         self.bigEditor = QTextEdit()
-        self.bigEditor.setPlainText("This widget takes up all the remaining space "
-                "in the top-level layout.")
+        self.bigEditor.setPlainText("log shows in here")
         self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
         cursor=self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
+
+        layout.addRow(self.bigEditor)
+        self.QGroupBox_info_show.setLayout(layout)
 
     def create_auto_test(self):
         self.horizontalGroupBox = QGroupBox("功能自动测试")
