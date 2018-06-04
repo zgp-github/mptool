@@ -2,19 +2,16 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
         QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
         QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
         QVBoxLayout)
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import QFont, QTextCursor
+from PyQt5.QtCore import QEvent
 import threading
 from threading import Timer
 from time import *
 
 class Dialog(QDialog):
-    NumGridRows = 3
-    NumButtons = 4
     test_1_running = False
 
     def __init__(self):
