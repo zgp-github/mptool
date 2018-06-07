@@ -15,7 +15,7 @@ import requests
 import json
 
 class Dialog(QDialog):
-    test_1_running = False
+    current_mac_data = None
 
     def __init__(self):
         super(Dialog, self).__init__()
@@ -147,14 +147,9 @@ class Dialog(QDialog):
         self.QGroupBox_info_show.setLayout(layout)
 
     def daemon_start(self):
-        if Dialog.test_1_running == False:
-            Dialog.test_1_running = True
-            self.bigEditor.append("daemon_start")
-            t = threading.Thread(target=self.get_FTS_data)
-            t.start()
-        else:
-            self.bigEditor.append("test 1 is already running!")
-            pass
+        self.bigEditor.append("daemon_start")
+        t = threading.Thread(target=self.get_FTS_data)
+        t.start()
 
     def get_FTS_data(self):
         while True:
