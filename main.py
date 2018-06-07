@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView, Q
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import QFont, QTextCursor
-from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
