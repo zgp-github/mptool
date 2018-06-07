@@ -31,7 +31,6 @@ class Dialog(QDialog):
         self.create_auto_test()
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-
         # buttonBox.accepted.connect(self.accept)
         # buttonBox.rejected.connect(self.reject)
 
@@ -43,6 +42,16 @@ class Dialog(QDialog):
         mainLayout.addWidget(buttonBox)
         mainLayout.addWidget(self.horizontalGroupBox)
         self.setLayout(mainLayout)
+
+        # It is a timer test code
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.start()
+        self.timer.timeout.connect(self.onTimerOut)
+
+    def onTimerOut(self):
+        self.bigEditor.append("timer test...")
+        self.timer.stop()
 
     def createMenu(self):
         self.menuBar = QMenuBar()
