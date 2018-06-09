@@ -73,7 +73,7 @@ class Dialog(QDialog):
         self.gridGroupBox = QGroupBox("数据显示")
         layout = QGridLayout()
 
-        self.table = QTableWidget(3, 2)
+        self.table = QTableWidget(4, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -84,20 +84,25 @@ class Dialog(QDialog):
         font = QFont("Microsoft YaHei", 10)
         self.table.setFont(font)
 
-        newItem = QTableWidgetItem("MAC地址")
+        newItem = QTableWidgetItem("测试ID")
         self.table.setItem(0, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(0, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器类型")
+        newItem = QTableWidgetItem("MAC地址")
         self.table.setItem(1, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器状态")
+        newItem = QTableWidgetItem("传感器类型")
         self.table.setItem(2, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(2, 1, newItem)
+
+        newItem = QTableWidgetItem("传感器状态")
+        self.table.setItem(3, 0, newItem)
+        newItem = QTableWidgetItem("None")
+        self.table.setItem(3, 1, newItem)
 
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(2, 100)
@@ -150,16 +155,22 @@ class Dialog(QDialog):
     count=0
     def update_ui_and_upload_data(self, list):
         print("---------------",list)
-        sensor_mac = list[0]
-        newItem = QTableWidgetItem(sensor_mac)
+
+        sensor_id = str(list[0])
+        newItem = QTableWidgetItem(sensor_id)
         self.table.setItem(0, 1, newItem)
+        self.bigEditor.append(sensor_id)
+
+        sensor_mac = list[1]
+        newItem = QTableWidgetItem(sensor_mac)
+        self.table.setItem(1, 1, newItem)
         self.bigEditor.append(sensor_mac)
 
-        sensor_type = list[1]
+        sensor_type = list[2]
         newItem = QTableWidgetItem(sensor_type)
-        self.table.setItem(1, 1, newItem)
+        self.table.setItem(2, 1, newItem)
 
-        msg = list[2]
+        msg = list[3]
         self.bigEditor.append(msg)
         print(self.count)
         if self.count % 3 == 1:
@@ -195,8 +206,10 @@ class Dialog(QDialog):
                     +str(row[7])+" "\
                     +str(row[8])+" "\
                     +str(row[9])
+                index = (row[0])
                 mac = row[7]
                 dataList = []
+                dataList.append(index)
                 dataList.append(mac)
                 dataList.append("door_window_sensor")
                 dataList.append(msg)
