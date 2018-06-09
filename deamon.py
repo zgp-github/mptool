@@ -16,6 +16,7 @@ import json
 
 class Dialog(QDialog):
     current_mac_data = None
+    _signal=QtCore.pyqtSignal(list)
 
     def __init__(self):
         super(Dialog, self).__init__()
@@ -23,7 +24,6 @@ class Dialog(QDialog):
 
     def initUI(self):
         title = 'MPTOOL4PC .IO NGxx Version 0.1'
-
         screenRect = QApplication.instance().desktop().availableGeometry()
         # get the screen width and height
         width = screenRect.width()*2/5
@@ -151,7 +151,19 @@ class Dialog(QDialog):
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
 
+    def mySignal(self, list):
+        print("---------------",list)
+        sensor_mac = list[0]
+        newItem = QTableWidgetItem(sensor_mac)
+        self.table.setItem(0, 1, newItem)
+        self.bigEditor.append(sensor_mac)
+
+        sensor_type = list[1]
+        newItem = QTableWidgetItem(sensor_type)
+        self.table.setItem(1, 1, newItem)
+
     def get_FTS_data(self):
+        self._signal.connect(self.mySignal)
         while True:
             print("test_unit_1")
             self.bigEditor.append("success")
@@ -172,9 +184,10 @@ class Dialog(QDialog):
             for row in cursor:
                 print(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
                 mac = row[7]
-                newItem = QTableWidgetItem(mac)
-                self.table.setItem(0, 1, newItem)
-                self.bigEditor.append(mac)
+                dataList = []
+                dataList.append(mac)
+                dataList.append("door_window_sensor")
+                self._signal.emit(dataList)
             conn.close()
 
 if __name__ == '__main__':
