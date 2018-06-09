@@ -131,7 +131,7 @@ class Dialog(QDialog):
         self.test_result.setText(info)
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
-        
+
     def create_info_show(self):
         self.QGroupBox_info_show = QGroupBox("运行信息")
         layout = QFormLayout()
@@ -139,10 +139,6 @@ class Dialog(QDialog):
         self.bigEditor = QTextEdit()
         self.bigEditor.setPlainText("log shows in here")
         self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
-        cursor=self.bigEditor.textCursor()
-        cursor.movePosition(QTextCursor.End)
-        self.bigEditor.setTextCursor(cursor)
-
         layout.addRow(self.bigEditor)
         self.QGroupBox_info_show.setLayout(layout)
 
@@ -162,33 +158,41 @@ class Dialog(QDialog):
         newItem = QTableWidgetItem(sensor_type)
         self.table.setItem(1, 1, newItem)
 
+        msg = list[2]
+        self.bigEditor.append(msg)
+        self.update_test_resule_show("success")
+        cursor=self.bigEditor.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        self.bigEditor.setTextCursor(cursor)
+
     def get_FTS_data(self):
         self._signal.connect(self.mySignal)
         db = "ftsTestResults.db"
         conn = sqlite3.connect(db)
         c = conn.cursor()
+        cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"
 
         while True:
-            print("test_unit_1")
-            self.bigEditor.append("success")
-            self.update_test_resule_show("success")
-            sleep(1)
-            self.update_test_resule_show("fail")
-            self.bigEditor.append("fail")
-            sleep(1)
-            self.update_test_resule_show()
-            self.bigEditor.append("no statues")
-            sleep(1)
-
-            cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"
             cursor = c.execute(cmd)
             for row in cursor:
                 print(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
+                msg = str(row[0])+" "\
+                    +str(row[1])+" "\
+                    +str(row[2])+" "\
+                    +str(row[3])+" "\
+                    +str(row[4])+" "\
+                    +str(row[5])+" "\
+                    +str(row[6])+" "\
+                    +str(row[7])+" "\
+                    +str(row[8])+" "\
+                    +str(row[9])
                 mac = row[7]
                 dataList = []
                 dataList.append(mac)
                 dataList.append("door_window_sensor")
+                dataList.append(msg)
                 self._signal.emit(dataList)
+            sleep(1)
         print("-------close database-------")
         conn.close()
 
