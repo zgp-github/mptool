@@ -147,7 +147,8 @@ class Dialog(QDialog):
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
 
-    def mySignal(self, list):
+    count=0
+    def update_ui_and_upload_data(self, list):
         print("---------------",list)
         sensor_mac = list[0]
         newItem = QTableWidgetItem(sensor_mac)
@@ -160,13 +161,21 @@ class Dialog(QDialog):
 
         msg = list[2]
         self.bigEditor.append(msg)
-        self.update_test_resule_show("success")
+        print(self.count)
+        if self.count % 3 == 1:
+            self.update_test_resule_show("success")
+        elif self.count % 3 == 2:
+            self.update_test_resule_show("fail")
+        else:
+            self.update_test_resule_show()
+        self.count = self.count + 1
+
         cursor=self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
 
     def get_FTS_data(self):
-        self._signal.connect(self.mySignal)
+        self._signal.connect(self.update_ui_and_upload_data)
         db = "ftsTestResults.db"
         conn = sqlite3.connect(db)
         c = conn.cursor()
@@ -192,7 +201,7 @@ class Dialog(QDialog):
                 dataList.append("door_window_sensor")
                 dataList.append(msg)
                 self._signal.emit(dataList)
-            sleep(1)
+                sleep(1)
         print("-------close database-------")
         conn.close()
 
