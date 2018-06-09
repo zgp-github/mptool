@@ -15,6 +15,7 @@ import requests
 import json
 
 class Dialog(QDialog):
+    thread_get_FTS_data = False
     current_mac_data = None
     _signal=QtCore.pyqtSignal(list)
 
@@ -53,7 +54,13 @@ class Dialog(QDialog):
         self.timer.setInterval(1000)
         self.timer.start()
         self.timer.timeout.connect(self.onTimerOut)
+        self.thread_get_FTS_data = True
         self.daemon_start()
+
+    # overwrite the window close function
+    def closeEvent(self, event):
+        print("closeEvent: ", event)
+        self.thread_get_FTS_data = False
 
     def onTimerOut(self):
         self.bigEditor.append("timer test...")
@@ -192,7 +199,7 @@ class Dialog(QDialog):
         c = conn.cursor()
         cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"
 
-        while True:
+        while self.thread_get_FTS_data == True:
             cursor = c.execute(cmd)
             for row in cursor:
                 print(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
