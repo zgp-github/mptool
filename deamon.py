@@ -164,6 +164,10 @@ class Dialog(QDialog):
 
     def get_FTS_data(self):
         self._signal.connect(self.mySignal)
+        db = "ftsTestResults.db"
+        conn = sqlite3.connect(db)
+        c = conn.cursor()
+
         while True:
             print("test_unit_1")
             self.bigEditor.append("success")
@@ -176,9 +180,6 @@ class Dialog(QDialog):
             self.bigEditor.append("no statues")
             sleep(1)
 
-            db = "ftsTestResults.db"
-            conn = sqlite3.connect(db)
-            c = conn.cursor()
             cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"
             cursor = c.execute(cmd)
             for row in cursor:
@@ -188,7 +189,8 @@ class Dialog(QDialog):
                 dataList.append(mac)
                 dataList.append("door_window_sensor")
                 self._signal.emit(dataList)
-            conn.close()
+        print("-------close database-------")
+        conn.close()
 
 if __name__ == '__main__':
     import sys
