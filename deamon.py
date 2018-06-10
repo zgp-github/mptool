@@ -166,12 +166,10 @@ class Dialog(QDialog):
         sensor_id = str(list[0])
         newItem = QTableWidgetItem(sensor_id)
         self.table.setItem(0, 1, newItem)
-        self.bigEditor.append(sensor_id)
 
         sensor_mac = list[1]
         newItem = QTableWidgetItem(sensor_mac)
         self.table.setItem(1, 1, newItem)
-        self.bigEditor.append(sensor_mac)
 
         sensor_type = list[2]
         newItem = QTableWidgetItem(sensor_type)
