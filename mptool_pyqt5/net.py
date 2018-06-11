@@ -16,7 +16,9 @@ class network():
     
     def upload_data(self, mac, fts_result):
         body = {"mac": mac, "FTS": fts_result}
-        response = requests.post(
-            network.url, data=json.dumps(body), headers=network.headers, timeout=5)
-        print("response.text: ", response.text)
-        return response.text
+        try:
+            response = requests.post(network.url, data=json.dumps(body), headers=network.headers, timeout=5)
+            print("response.text: ", response.text)
+            return response.text
+        except Exception:  
+            print("Error: network upload data Exception:", Exception)
