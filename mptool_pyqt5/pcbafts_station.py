@@ -56,7 +56,7 @@ class PCBAFTS(QDialog):
         self.msg_show.setFont(QFont("Microsoft YaHei", 20))
         layout.addWidget(self.msg_show, 1, 1)
 
-        self.table = QTableWidget(4, 2)
+        self.table = QTableWidget(5, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -72,20 +72,25 @@ class PCBAFTS(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(0, 1, newItem)
 
-        newItem = QTableWidgetItem("MAC地址")
+        newItem = QTableWidgetItem("测试时间")
         self.table.setItem(1, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器类型")
+        newItem = QTableWidgetItem("MAC地址")
         self.table.setItem(2, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(2, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器状态")
+        newItem = QTableWidgetItem("传感器类型")
         self.table.setItem(3, 0, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(3, 1, newItem)
+
+        newItem = QTableWidgetItem("传感器状态")
+        self.table.setItem(4, 0, newItem)
+        newItem = QTableWidgetItem("None")
+        self.table.setItem(4, 1, newItem)
 
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
@@ -169,7 +174,7 @@ class PCBAFTS(QDialog):
         return False
 
     def gets_fts_data(self):
-        self.bigEditor.append("daemon_start")
+        self.bigEditor.append("gets_fts_data")
         self.thread_get_FTS_data = True
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
@@ -177,36 +182,40 @@ class PCBAFTS(QDialog):
     def get_FTS_data(self):
         self._signal_update.connect(self.update_ui_and_upload_data)
         while self.thread_get_FTS_data == True:
+            data = []
             data = fts_data().get_Tests_data()
             print("get fts data in FTS station: ", data)
-            index = data[0]
-            mac = data[1]
-            dataList = []
-            dataList.append(index)
-            dataList.append(mac)
-            dataList.append("door_window_sensor")
+            dataList = data
+            sensor_type = "door_window_sensor"
+            dataList.append(sensor_type)
             self._signal_update.emit(dataList)
             sleep(1)
 
     count = 0
     def update_ui_and_upload_data(self, list):
         print("---------------list:", list)
-
+        # sensor ID
         sensor_id = str(list[0])
         newItem = QTableWidgetItem(sensor_id)
         self.table.setItem(0, 1, newItem)
 
-        sensor_mac = list[1]
-        newItem = QTableWidgetItem(sensor_mac)
+        # test time
+        t = list[1]
+        newItem = QTableWidgetItem(t)
         self.table.setItem(1, 1, newItem)
 
-        sensor_type = list[2]
-        newItem = QTableWidgetItem(sensor_type)
+        # sensor mac
+        mac = list[2]
+        newItem = QTableWidgetItem(mac)
         self.table.setItem(2, 1, newItem)
+
+        # sensor type
+        sensor_type = list[3]
+        newItem = QTableWidgetItem(sensor_type)
+        self.table.setItem(3, 1, newItem)
 
         # msg = list[3]
         # self.bigEditor.append(msg)
-        print(self.count)
         if self.count % 3 == 1:
             self.update_test_resule_show("success")
         elif self.count % 3 == 2:

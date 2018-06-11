@@ -12,7 +12,11 @@ class Main_Page(QTabWidget):
         super(Main_Page, self).__init__(parent)
         title = 'MPTOOL4PC .IO NGxx Version 0.1'
         self.setWindowTitle(title)
-        self.resize(800, 600)
+        screenRect = QApplication.instance().desktop().availableGeometry()
+        # get the screen width and height
+        width = screenRect.width()*60/100
+        height = screenRect.height()*60/100
+        self.resize(width, height)
 
         self.PCBA_FTS_PAGE = PCBAFTS()
         self.page2 = page2()
