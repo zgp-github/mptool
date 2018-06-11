@@ -12,6 +12,7 @@ import threading
 from threading import Timer
 from time import *
 from fts_data import fts_data
+from net import network
 
 class PCBAFTS(QDialog):
     thread_get_FTS_data = False
@@ -182,12 +183,26 @@ class PCBAFTS(QDialog):
     def get_FTS_data(self):
         self._signal_update.connect(self.update_ui_and_upload_data)
         while self.thread_get_FTS_data == True:
-            data = []
             data = fts_data().get_Tests_data()
             print("get fts data in FTS station: ", data)
-            dataList = data
+
+            sensor_id = data[0]
+            sensor_time = data[1]
+            sensor_mac = data[2]
             sensor_type = "door_window_sensor"
+
+            dataList = []
+            dataList.append(sensor_id)
+            dataList.append(sensor_time)
+            dataList.append(sensor_mac)
             dataList.append(sensor_type)
+
+            net = network()
+            FTSresult = "success"
+            upload_result = net.upload_data(sensor_mac, FTSresult)
+            dataList.append(upload_result)
+
+            print("upload result:", upload_result)
             self._signal_update.emit(dataList)
             sleep(1)
 
