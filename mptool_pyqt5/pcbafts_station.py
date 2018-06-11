@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
-        QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
-        QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
-        QVBoxLayout)
+                             QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
+                             QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
+                             QVBoxLayout)
 from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
@@ -11,32 +12,29 @@ import threading
 from threading import Timer
 from time import *
 
-class Dialog(QDialog):
-    test_1_running = False
-
+class PCBAFTS(QDialog):
     def __init__(self):
-        super(Dialog, self).__init__()
+        super(PCBAFTS, self).__init__()
         self.initUI()
 
     def initUI(self):
-        title = 'MPTOOL4PC .IO NGxx Version 0.1'
-        self.setWindowTitle(title)
-        self.createMenu()
+        # self.createMenu()
         self.create_cmd_input()
         self.create_test_result_show()
         self.create_info_show()
         self.create_auto_test()
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        # buttonBox = QDialogButtonBox(
+        #     QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         # buttonBox.accepted.connect(self.accept)
         # buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
-        mainLayout.setMenuBar(self.menuBar)
+        # mainLayout.setMenuBar(self.menuBar)
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
-        mainLayout.addWidget(buttonBox)
+        # mainLayout.addWidget(buttonBox)
         mainLayout.addWidget(self.horizontalGroupBox)
         self.setLayout(mainLayout)
 
@@ -49,16 +47,6 @@ class Dialog(QDialog):
     def onTimerOut(self):
         self.bigEditor.append("timer test...")
         self.timer.stop()
-
-    def createMenu(self):
-        self.menuBar = QMenuBar()
-        self.fileMenu = QMenu("文件", self)
-        self.exitAction = self.fileMenu.addAction("退出")
-        self.about = QMenu("帮助", self)
-        self.about.addAction("关于")
-        self.menuBar.addMenu(self.fileMenu)
-        self.menuBar.addMenu(self.about)
-        self.exitAction.triggered.connect(self.accept)
 
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
@@ -109,7 +97,8 @@ class Dialog(QDialog):
         layout = QFormLayout()
 
         self.test_result = QLabel(self, text="测试结果")
-        self.test_result.setStyleSheet('''color: black; background-color: gray''')
+        self.test_result.setStyleSheet(
+            '''color: black; background-color: gray''')
         info = '请开始测试'
         self.test_result.setText(info)
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
@@ -122,17 +111,20 @@ class Dialog(QDialog):
         print("update_test_resule_show: "+status)
         if status == "success":
             info = "测试通过"
-            self.test_result.setStyleSheet('''color: black; background-color: green''')
+            self.test_result.setStyleSheet(
+                '''color: black; background-color: green''')
         elif status == "fail":
             info = '测试失败'
-            self.test_result.setStyleSheet('''color: black; background-color: red''')
+            self.test_result.setStyleSheet(
+                '''color: black; background-color: red''')
         else:
             info = '请开始测试'
-            self.test_result.setStyleSheet('''color: black; background-color: gray''')
+            self.test_result.setStyleSheet(
+                '''color: black; background-color: gray''')
         self.test_result.setText(info)
         self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
-        
+
     def create_info_show(self):
         self.QGroupBox_info_show = QGroupBox("运行信息")
         layout = QFormLayout()
@@ -140,7 +132,7 @@ class Dialog(QDialog):
         self.bigEditor = QTextEdit()
         self.bigEditor.setPlainText("log shows in here")
         self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
-        cursor=self.bigEditor.textCursor()
+        cursor = self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
 
@@ -166,7 +158,7 @@ class Dialog(QDialog):
         button_4 = QPushButton("自动测试 4")
         button_4.clicked.connect(self.auto_test_4)
         layout.addWidget(button_4)
-        
+
         self.horizontalGroupBox.setLayout(layout)
 
     def update_msg_show(self, id=None):
@@ -202,15 +194,7 @@ class Dialog(QDialog):
         return False
 
     def auto_test_1(self):
-        if Dialog.test_1_running == False:
-            Dialog.test_1_running = True
-            print("auto_test_1")
-            self.bigEditor.append("start auto test 1")
-            t = threading.Thread(target=self.test_unit_1)
-            t.start()
-        else:
-            self.bigEditor.append("test 1 is already running!")
-            pass
+        self.bigEditor.append("test 1!")
 
     def auto_test_2(self):
         print("auto_test_2")
@@ -245,8 +229,3 @@ class Dialog(QDialog):
             self.bigEditor.append("no statues")
             sleep(1)
 
-if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    dialog = Dialog()
-    sys.exit(dialog.exec_())
