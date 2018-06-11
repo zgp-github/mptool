@@ -182,6 +182,7 @@ class PCBAFTS(QDialog):
     
     def get_FTS_data(self):
         self._signal_update.connect(self.update_ui_and_upload_data)
+        net = network()
         while self.thread_get_FTS_data == True:
             data = fts_data().get_Tests_data()
             print("get fts data in FTS station: ", data)
@@ -197,7 +198,6 @@ class PCBAFTS(QDialog):
             dataList.append(sensor_mac)
             dataList.append(sensor_type)
 
-            net = network()
             FTSresult = "success"
             upload_result = net.upload_data(sensor_mac, FTSresult)
             dataList.append(upload_result)
