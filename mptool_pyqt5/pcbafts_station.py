@@ -214,8 +214,9 @@ class PCBAFTS(QDialog):
         newItem = QTableWidgetItem(sensor_type)
         self.table.setItem(3, 1, newItem)
 
-        # msg = list[3]
-        # self.bigEditor.append(msg)
+        for val in list:
+            print(val)
+            self.bigEditor.append(str(val))
         if self.count % 3 == 1:
             self.update_test_resule_show("success")
         elif self.count % 3 == 2:
