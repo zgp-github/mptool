@@ -15,6 +15,7 @@ from fts_data import fts_data
 
 class PCBAFTS(QDialog):
     thread_get_FTS_data = False
+    _signal_update = QtCore.pyqtSignal(list)
     def __init__(self):
         super(PCBAFTS, self).__init__()
         self.initUI()
@@ -55,33 +56,38 @@ class PCBAFTS(QDialog):
         self.msg_show.setFont(QFont("Microsoft YaHei", 20))
         layout.addWidget(self.msg_show, 1, 1)
 
-        table = QTableWidget(3, 2)
+        self.table = QTableWidget(4, 2)
         # auto adapt the width
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         # set canot edit the table data
-        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-        table.setHorizontalHeaderLabels(['类型', '数据'])
+        self.table.setHorizontalHeaderLabels(['类型', '数据'])
         font = QFont("Microsoft YaHei", 10)
-        table.setFont(font)
+        self.table.setFont(font)
+
+        newItem = QTableWidgetItem("测试ID")
+        self.table.setItem(0, 0, newItem)
+        newItem = QTableWidgetItem("None")
+        self.table.setItem(0, 1, newItem)
 
         newItem = QTableWidgetItem("MAC地址")
-        table.setItem(0, 0, newItem)
+        self.table.setItem(1, 0, newItem)
         newItem = QTableWidgetItem("None")
-        table.setItem(0, 1, newItem)
+        self.table.setItem(1, 1, newItem)
 
         newItem = QTableWidgetItem("传感器类型")
-        table.setItem(1, 0, newItem)
+        self.table.setItem(2, 0, newItem)
         newItem = QTableWidgetItem("None")
-        table.setItem(1, 1, newItem)
+        self.table.setItem(2, 1, newItem)
 
         newItem = QTableWidgetItem("传感器状态")
-        table.setItem(2, 0, newItem)
+        self.table.setItem(3, 0, newItem)
         newItem = QTableWidgetItem("None")
-        table.setItem(2, 1, newItem)
+        self.table.setItem(3, 1, newItem)
 
-        layout.addWidget(table, 0, 2, 4, 1)
+        layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
         layout.setColumnStretch(2, 30)
         self.gridGroupBox.setLayout(layout)
@@ -169,6 +175,46 @@ class PCBAFTS(QDialog):
         t.start()
     
     def get_FTS_data(self):
+        self._signal_update.connect(self.update_ui_and_upload_data)
         while self.thread_get_FTS_data == True:
-            print("get fts data")
+            data = fts_data().get_Tests_data()
+            print("get fts data in FTS station: ", data)
+            index = data[0]
+            mac = data[1]
+            dataList = []
+            dataList.append(index)
+            dataList.append(mac)
+            dataList.append("door_window_sensor")
+            self._signal_update.emit(dataList)
             sleep(1)
+
+    count = 0
+    def update_ui_and_upload_data(self, list):
+        print("---------------list:", list)
+
+        sensor_id = str(list[0])
+        newItem = QTableWidgetItem(sensor_id)
+        self.table.setItem(0, 1, newItem)
+
+        sensor_mac = list[1]
+        newItem = QTableWidgetItem(sensor_mac)
+        self.table.setItem(1, 1, newItem)
+
+        sensor_type = list[2]
+        newItem = QTableWidgetItem(sensor_type)
+        self.table.setItem(2, 1, newItem)
+
+        # msg = list[3]
+        # self.bigEditor.append(msg)
+        print(self.count)
+        if self.count % 3 == 1:
+            self.update_test_resule_show("success")
+        elif self.count % 3 == 2:
+            self.update_test_resule_show("fail")
+        else:
+            self.update_test_resule_show()
+        self.count = self.count + 1
+
+        cursor = self.bigEditor.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        self.bigEditor.setTextCursor(cursor)

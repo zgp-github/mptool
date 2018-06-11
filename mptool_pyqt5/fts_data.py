@@ -11,7 +11,7 @@ class fts_data():
         print("it is a init function")
     
     def get_Tests_data(self):
-        data = list
+        data = []
         print("get the Tests table data")
         db = "ftsTestResults.db"
         cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"
@@ -19,5 +19,9 @@ class fts_data():
         c = conn.cursor()
         cursor = c.execute(cmd)
         for row in cursor:
-            data.append(row)
-        print("get fts data:", data)
+            data.append(row[0])
+            data.append(row[7])
+            sleep(1)
+            print("get fts data:", data)
+            return data
+        conn.close()
