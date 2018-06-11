@@ -232,13 +232,22 @@ class PCBAFTS(QDialog):
         for val in list:
             print(val)
             self.bigEditor.append(str(val))
-        if self.count % 3 == 1:
-            self.update_test_resule_show("success")
-        elif self.count % 3 == 2:
+
+        upload_status = list[4]
+        if upload_status == "newtwork_error":
             self.update_test_resule_show("fail")
+            msg = "网络错误,请检查您的网络连接和TN4C.IO IP地址"
+            self.msg_show.setText(msg)
         else:
-            self.update_test_resule_show()
-        self.count = self.count + 1
+            self.update_test_resule_show("success")
+
+        # if self.count % 3 == 1:
+        #     self.update_test_resule_show("success")
+        # elif self.count % 3 == 2:
+        #     self.update_test_resule_show("fail")
+        # else:
+        #     self.update_test_resule_show()
+        # self.count = self.count + 1
 
         cursor = self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)

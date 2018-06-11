@@ -19,6 +19,8 @@ class network():
         try:
             response = requests.post(network.url, data=json.dumps(body), headers=network.headers, timeout=5)
             print("response.text: ", response.text)
+            print("response: ", response)
             return response.text
-        except Exception:  
-            print("Error: network upload data Exception:", Exception)
+        except Exception as e:
+            print("Error: network upload data Exception:",e)
+            return "newtwork_error"
