@@ -11,8 +11,10 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
+from fts_data import fts_data
 
 class PCBAFTS(QDialog):
+    thread_get_FTS_data = False
     def __init__(self):
         super(PCBAFTS, self).__init__()
         self.initUI()
@@ -27,6 +29,8 @@ class PCBAFTS(QDialog):
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
         self.setLayout(mainLayout)
+
+        self.gets_fts_data()
 
         # It is a timer test code
         self.timer = QTimer()
@@ -158,3 +162,18 @@ class PCBAFTS(QDialog):
                 pass
         return False
 
+    def gets_fts_data(self):
+        self.bigEditor.append("daemon_start")
+        self.thread_get_FTS_data = True
+        t = threading.Thread(target=self.get_FTS_data)
+        t.start()
+    
+    # overwrite the window close function
+    def closeEvent(self, event):
+        print("closeEvent: ", event)
+        self.thread_get_FTS_data = False
+    
+    def get_FTS_data(self):
+        while self.thread_get_FTS_data == True:
+            print("get fts data")
+            sleep(1)
