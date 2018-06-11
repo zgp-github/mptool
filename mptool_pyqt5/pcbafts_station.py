@@ -18,24 +18,14 @@ class PCBAFTS(QDialog):
         self.initUI()
 
     def initUI(self):
-        # self.createMenu()
         self.create_cmd_input()
         self.create_test_result_show()
         self.create_info_show()
-        self.create_auto_test()
-
-        # buttonBox = QDialogButtonBox(
-        #     QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        # buttonBox.accepted.connect(self.accept)
-        # buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
-        # mainLayout.setMenuBar(self.menuBar)
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
-        # mainLayout.addWidget(buttonBox)
-        mainLayout.addWidget(self.horizontalGroupBox)
         self.setLayout(mainLayout)
 
         # It is a timer test code
@@ -139,28 +129,6 @@ class PCBAFTS(QDialog):
         layout.addRow(self.bigEditor)
         self.QGroupBox_info_show.setLayout(layout)
 
-    def create_auto_test(self):
-        self.horizontalGroupBox = QGroupBox("功能自动测试")
-        layout = QHBoxLayout()
-
-        button_1 = QPushButton("自动测试 1")
-        button_1.clicked.connect(self.auto_test_1)
-        layout.addWidget(button_1)
-
-        button_2 = QPushButton("自动测试 2")
-        button_2.clicked.connect(self.auto_test_2)
-        layout.addWidget(button_2)
-
-        button_3 = QPushButton("自动测试 3")
-        button_3.clicked.connect(self.auto_test_3)
-        layout.addWidget(button_3)
-
-        button_4 = QPushButton("自动测试 4")
-        button_4.clicked.connect(self.auto_test_4)
-        layout.addWidget(button_4)
-
-        self.horizontalGroupBox.setLayout(layout)
-
     def update_msg_show(self, id=None):
         if id == 1:
             msg = "请扫描配对命令码"
@@ -186,46 +154,7 @@ class PCBAFTS(QDialog):
                     msg = self.cmd_input.text()
                     print("get: "+msg)
                     self.bigEditor.append(msg)
-                    #self.check_cmd()
-                    # t = threading.Thread(target=self.check_cmd)
-                    # t.start()
             else:
                 pass
         return False
-
-    def auto_test_1(self):
-        self.bigEditor.append("test 1!")
-
-    def auto_test_2(self):
-        print("auto_test_2")
-        self.bigEditor.append("start auto test 2")
-
-    def auto_test_3(self):
-        print("auto_test_3")
-        self.bigEditor.append("start auto test 3")
-        self.update_test_resule_show("success")
-
-    def auto_test_4(self):
-        print("auto_test_4")
-        self.bigEditor.append("start auto test 4")
-        self.update_test_resule_show("fail")
-
-    def test_unit_1(self):
-        while True:
-            print("test_unit_1")
-            self.cmd_input.setText("cmd_start_pair")
-            self.update_msg_show(2)
-            self.bigEditor.append("success")
-            self.update_test_resule_show("success")
-            sleep(1)
-            self.cmd_input.setText("error cmd input test...")
-            self.update_msg_show(3)
-            self.update_test_resule_show("fail")
-            self.bigEditor.append("fail")
-            sleep(1)
-            self.cmd_input.clear()
-            self.update_msg_show(1)
-            self.update_test_resule_show()
-            self.bigEditor.append("no statues")
-            sleep(1)
 
