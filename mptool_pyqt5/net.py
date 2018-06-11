@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import os.path
 import sqlite3
 import requests
 import json
@@ -10,6 +11,13 @@ class network():
 
     def __init__(self):
         self.init_data()
+        config='config.ini'
+        if os.path.exists(config):
+            print("config.ini exist")
+        else:
+            print("config.ini not exist")
+            f=open(config,'w')
+            f.close()
 
     def init_data(self):
         print("net modle init data")
