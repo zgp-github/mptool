@@ -18,11 +18,10 @@ class Main_Page(QTabWidget):
         self.page2 = page2()
         self.page3 = page3()
         self.page4 = page4()
-        self.addTab(self.PCBA_FTS_PAGE, u"PCBA FTS")
+        self.addTab(self.PCBA_FTS_PAGE, u"PCBA FTS测试工站")
         self.addTab(self.page2, u"page2")
         self.addTab(self.page3, u"page3")
         self.addTab(self.page4, u"page4")
-
 
 if __name__ == '__main__':
     import sys
