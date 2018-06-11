@@ -22,6 +22,11 @@ class Main_Page(QTabWidget):
         self.addTab(self.page2, u"page2")
         self.addTab(self.page3, u"page3")
         self.addTab(self.page4, u"page4")
+    
+    # overwrite the window close function
+    def closeEvent(self, event):
+        print("closeEvent: ", event)
+        self.PCBA_FTS_PAGE.thread_get_FTS_data = False
 
 if __name__ == '__main__':
     import sys

@@ -168,11 +168,6 @@ class PCBAFTS(QDialog):
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
     
-    # overwrite the window close function
-    def closeEvent(self, event):
-        print("closeEvent: ", event)
-        self.thread_get_FTS_data = False
-    
     def get_FTS_data(self):
         while self.thread_get_FTS_data == True:
             print("get fts data")
