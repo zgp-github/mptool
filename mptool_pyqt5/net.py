@@ -43,7 +43,7 @@ class network():
         tn4cioip = conf.get('Mptool4PC', 'TN4CIOIP')
         print("--------------------------------------------------------------:",station, tn4cioip)
         tmp = str(random.randint(1,1000))
-        network.url = "'http://"+tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/update_NGxx_mac_to_database/"+tmp
+        network.url = "http://"+tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/update_NGxx_mac_to_database/"+tmp
         print("--------------------------------------------------------------url:",network.url)
     
     def upload_data(self, mac, fts_result):
