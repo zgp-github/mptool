@@ -15,7 +15,9 @@ from station_gcl.gcl import GCL
 from station_repair.repair import REPAIR
 
 class Main_Page(QTabWidget):
-    logs_path = "logs/"
+    logs_path = os.path.join(os.getcwd(), "logs")
+    log_file = os.path.join(os.getcwd(), "logs", "mptool4pc.log")
+
     def __init__(self, parent=None):
         super(Main_Page, self).__init__(parent)
         title = 'MPTOOL4PC .IO NGxx Version 0.1'
@@ -25,10 +27,10 @@ class Main_Page(QTabWidget):
         width = screenRect.width()*60/100
         height = screenRect.height()*70/100
         self.resize(width, height)
+        self.create_logs_path()
 
         station = self.station_config()
-        log_file = self.logs_path+"mptool4pc.log"
-        logging.basicConfig(filename=log_file, level=logging.DEBUG,
+        logging.basicConfig(filename=self.log_file, level=logging.DEBUG,
                             format='%(asctime)s:%(message)s')
         logging.debug('--------------------------MPTOOL4PC Start--------------------------')
         logging.debug('main page station config:'+station)
@@ -51,14 +53,13 @@ class Main_Page(QTabWidget):
         elif station == "ASSEMBLY_REPAIR":
             self.repair_station = REPAIR()
             self.addTab(self.repair_station, u"维修工站")
-        self.create_logs_path()
 
     def create_logs_path(self):
         print("main page create the logs path")
         if os.path.exists(self.logs_path):
             pass
         else:
-            os.makedirs(self.logs_path)
+            os.makedirs(self.logs_path)            
 
     # overwrite the window close function
     def closeEvent(self, event):
