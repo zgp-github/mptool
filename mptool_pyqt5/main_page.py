@@ -38,6 +38,7 @@ class Main_Page(QTabWidget):
         elif station == "ASSEMBLY_ML1":
             self.ml1_station = ML1()
             self.addTab(self.ml1_station, u"ML1打印工站")
+            self.ml1_station.set_focus()
         elif station == "ASSEMBLY_GCL":
             self.gcl_station = GCL()
             self.addTab(self.gcl_station, u"入箱工站")

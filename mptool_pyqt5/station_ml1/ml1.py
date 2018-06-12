@@ -28,8 +28,10 @@ class ML1(QDialog):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
-
         self.setLayout(mainLayout)
+
+    def set_focus(self):
+        self.cmd_input.setFocus()
 
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
@@ -44,7 +46,6 @@ class ML1(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
-        self.cmd_input.setFocus()
         self.cmd_input.returnPressed.connect(self.updateUi)
 
         self.table = QTableWidget(2, 2)
@@ -88,6 +89,7 @@ class ML1(QDialog):
         self.QGroupBox_info_show.setLayout(layout)
 
     def updateUi(self):
-        print("get key")
-        print(self.cmd_input.text())
+        cmd = self.cmd_input.text()
+        self.bigEditor.setText(cmd)
+        print(cmd)
         self.cmd_input.clear()
