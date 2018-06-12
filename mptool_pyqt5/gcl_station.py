@@ -2,7 +2,7 @@
 from PyQt5.QtWidgets import QDialog
 
 
-class page5(QDialog):
+class GCL(QDialog):
     def __init__(self, parent=None):
-        super(page5, self).__init__(parent)
+        super(GCL, self).__init__(parent)
         self.setStyleSheet("background: yellow")

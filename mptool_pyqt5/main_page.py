@@ -9,8 +9,8 @@ import random
 from pcbafts_station import PCBAFTS
 from page2 import page2
 from page3 import page3
-from page4 import page4
-from page5 import page5
+from ml1_station import ML1
+from gcl_station import GCL
 from page6 import page6
 
 class Main_Page(QTabWidget):
@@ -25,7 +25,7 @@ class Main_Page(QTabWidget):
         self.resize(width, height)
 
         station = self.station_config()
-        print("----------------------------main page----------------------------------station:", station)
+        print("----------------------------main page----------------------------station: ", station)
         if station == "PCBA_FTS":
             self.PCBA_FTS_PAGE = PCBAFTS()
             self.addTab(self.PCBA_FTS_PAGE, u"单板FTS测试工站")
@@ -36,11 +36,11 @@ class Main_Page(QTabWidget):
             self.page3 = page3()
             self.addTab(self.page3, u"组装线FTS测试工站")
         elif station == "ASSEMBLY_ML1":
-            self.page4 = page4()
-            self.addTab(self.page4, u"ML1打印工站")
+            self.ml1_station = ML1()
+            self.addTab(self.ml1_station, u"ML1打印工站")
         elif station == "ASSEMBLY_GCL":
-            self.page5 = page5()
-            self.addTab(self.page5, u"入箱工站")
+            self.gcl_station = GCL()
+            self.addTab(self.gcl_station, u"入箱工站")
         elif station == "ASSEMBLY_REPAIR":
             self.page6 = page6()
             self.addTab(self.page6, u"维修工站")

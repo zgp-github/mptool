@@ -14,9 +14,9 @@ from time import *
 from fts_data import fts_data
 from net import network
 
-class page4(QDialog):
+class ML1(QDialog):
     def __init__(self, parent=None):
-        super(page4, self).__init__(parent)
+        super(ML1, self).__init__(parent)
         self.initUI()
 
     def initUI(self):
