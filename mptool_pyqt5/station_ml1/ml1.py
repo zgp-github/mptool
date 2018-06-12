@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
+import signal
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
                              QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
                              QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
@@ -41,6 +44,8 @@ class ML1(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
+        self.cmd_input.setFocus()
+        self.cmd_input.returnPressed.connect(self.updateUi)
 
         self.table = QTableWidget(2, 2)
         # auto adapt the width
@@ -81,3 +86,8 @@ class ML1(QDialog):
 
         layout.addRow(self.bigEditor)
         self.QGroupBox_info_show.setLayout(layout)
+
+    def updateUi(self):
+        print("get key")
+        print(self.cmd_input.text())
+        self.cmd_input.clear()
