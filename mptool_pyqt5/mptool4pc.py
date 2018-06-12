@@ -20,7 +20,7 @@ class Main_Page(QTabWidget):
 
     def __init__(self, parent=None):
         super(Main_Page, self).__init__(parent)
-        title = 'MPTOOL4PC .IO NGxx Version 0.1'
+        title = 'MPTOOL4PC .IO NGxx Version 0.1(2018-06-12)'
         self.setWindowTitle(title)
         screenRect = QApplication.instance().desktop().availableGeometry()
         # get the screen width and height
@@ -60,7 +60,7 @@ class Main_Page(QTabWidget):
         if os.path.exists(self.logs_path):
             pass
         else:
-            os.makedirs(self.logs_path)            
+            os.makedirs(self.logs_path)
 
     # overwrite the window close function
     def closeEvent(self, event):

@@ -39,12 +39,11 @@ class PCBAFTS(QDialog):
 
         # It is a timer test code
         self.timer = QTimer()
-        self.timer.setInterval(1000)
+        self.timer.setInterval(5000)
         self.timer.start()
         self.timer.timeout.connect(self.onTimerOut)
-
     def onTimerOut(self):
-        self.bigEditor.append("timer test...")
+        print("-------------------timer test (tieout=5000)...-------------")
         self.timer.stop()
     
     def set_focus(self):
@@ -182,7 +181,6 @@ class PCBAFTS(QDialog):
         return False
 
     def gets_fts_data(self):
-        self.bigEditor.append("gets_fts_data")
         self.thread_get_FTS_data = True
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
