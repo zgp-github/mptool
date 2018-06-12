@@ -6,7 +6,7 @@ import sqlite3
 import requests
 import json
 
-class fts_data():
+class database():
     current_mac = None
     current_id = None
     current_time =None
@@ -15,7 +15,7 @@ class fts_data():
         self.init_data()
     
     def init_data(self):
-        print("fts_data init data")
+        print("database init data")
         id_list = []
         db = "ftsTestResults.db"
         cmd = "SELECT TestID, TestLimitsID, TimeStamp, TestStatus, TestResult, FtsSerialNumber, ChipSerialNumber, MACAddress, DUTSerialNumber, RaceConfigID   from Tests"

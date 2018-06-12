@@ -14,7 +14,7 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
-from station_pcbafts.fts_data import fts_data
+from station_pcbafts.fts_data import database
 from station_pcbafts.net import network
 
 class PCBAFTS(QDialog):
@@ -183,31 +183,50 @@ class PCBAFTS(QDialog):
         self.thread_get_FTS_data = True
         t = threading.Thread(target=self.get_FTS_data)
         t.start()
-    
+
     def get_FTS_data(self):
         self._signal_update.connect(self.update_ui_and_upload_data)
         net = network()
+        data = database().get_Tests_data()
+        print("get fts data in FTS station: ", data)
+
+        sensor_id = data[0]
+        sensor_time = data[1]
+        sensor_mac = data[2]
+        sensor_type = "door_window_sensor"
+
+        dataList = []
+        dataList.append(sensor_id)
+        dataList.append(sensor_time)
+        dataList.append(sensor_mac)
+        dataList.append(sensor_type)
+
+        FTSresult = "success"
+        upload_result = net.upload_data(sensor_mac, FTSresult)
+        dataList.append(upload_result)
+
+        print("upload result:", upload_result)
+        self._signal_update.emit(dataList)
         while self.thread_get_FTS_data == True:
             data = fts_data().get_Tests_data()
             print("get fts data in FTS station: ", data)
 
-            sensor_id = data[0]
-            sensor_time = data[1]
-            sensor_mac = data[2]
-            sensor_type = "door_window_sensor"
+            id = data[0]
+            time = data[1]
+            mac = data[2]
+            type = "door_window_sensor"
 
-            dataList = []
-            dataList.append(sensor_id)
-            dataList.append(sensor_time)
-            dataList.append(sensor_mac)
-            dataList.append(sensor_type)
-
-            FTSresult = "success"
-            upload_result = net.upload_data(sensor_mac, FTSresult)
-            dataList.append(upload_result)
-
-            print("upload result:", upload_result)
-            self._signal_update.emit(dataList)
+            if id != sensor_id and mac != sensor_mac:
+                dataList = []
+                dataList.append(id)
+                dataList.append(time)
+                dataList.append(mac)
+                dataList.append(type)
+                FTSresult = "success"
+                upload_result = net.upload_data(mac, FTSresult)
+                dataList.append(upload_result)
+                print("get new data upload result:", upload_result)
+                self._signal_update.emit(dataList)
             sleep(1)
 
     # count = 0
