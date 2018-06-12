@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 import os.path
 import configparser
 import random
+import logging
 
 from station_pcbafts.pcbafts import PCBAFTS
 from station_assemblypair.assemblypair import ASSEMBLY_PAIR
@@ -14,7 +15,7 @@ from station_gcl.gcl import GCL
 from station_repair.repair import REPAIR
 
 class Main_Page(QTabWidget):
-    logs_path = "logs"
+    logs_path = "logs/"
     def __init__(self, parent=None):
         super(Main_Page, self).__init__(parent)
         title = 'MPTOOL4PC .IO NGxx Version 0.1'
@@ -26,7 +27,10 @@ class Main_Page(QTabWidget):
         self.resize(width, height)
 
         station = self.station_config()
-        print("----------------------------main page----------------------------station: ", station)
+        log_file = self.logs_path+"mptool4pc.log"
+        logging.basicConfig(filename=log_file, level=logging.DEBUG,
+                            format='%(asctime)s:%(message)s')
+        logging.debug('main page get the station config:'+station)
         if station == "PCBA_FTS":
             self.PCBA_FTS_PAGE = PCBAFTS()
             self.addTab(self.PCBA_FTS_PAGE, u"单板FTS测试工站")
@@ -57,7 +61,7 @@ class Main_Page(QTabWidget):
 
     # overwrite the window close function
     def closeEvent(self, event):
-        print("closeEvent: ", event)
+        logging.debug('mptool4pc closed')
         station = self.station_config()
         if station == "PCBA_FTS":
             self.PCBA_FTS_PAGE.thread_get_FTS_data = False
