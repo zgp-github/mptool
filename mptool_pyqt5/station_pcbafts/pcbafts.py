@@ -206,7 +206,7 @@ class PCBAFTS(QDialog):
             self._signal_update.emit(dataList)
             sleep(1)
 
-    count = 0
+    # count = 0
     def update_ui_and_upload_data(self, list):
         print("---------------list:", list)
         # sensor ID
