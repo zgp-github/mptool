@@ -29,9 +29,9 @@ class Main_Page(QTabWidget):
         self.addTab(self.PCBA_FTS_PAGE, u"单板FTS测试工站")
         self.addTab(self.page2, u"组装线配对测试工站")
         self.addTab(self.page3, u"组装线FTS测试工站")
-        self.addTab(self.page4, u"组装线ML1打印工站")
-        self.addTab(self.page5, u"组装线入箱工站")
-        self.addTab(self.page6, u"组装线维修工站")
+        self.addTab(self.page4, u"ML1打印工站")
+        self.addTab(self.page5, u"入箱工站")
+        self.addTab(self.page6, u"维修工站")
     
     # overwrite the window close function
     def closeEvent(self, event):
