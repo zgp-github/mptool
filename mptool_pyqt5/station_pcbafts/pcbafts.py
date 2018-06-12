@@ -18,14 +18,11 @@ from station_pcbafts.fts_data import fts_data
 from station_pcbafts.net import network
 
 class PCBAFTS(QDialog):
-    logs_path = os.path.join(os.getcwd(), "logs")
-    log_file = os.path.join(os.getcwd(), "logs", "pcbafts.log")
     thread_get_FTS_data = False
     _signal_update = QtCore.pyqtSignal(list)
 
     def __init__(self):
         super(PCBAFTS, self).__init__()
-        logging.basicConfig(filename=self.log_file, level=logging.DEBUG, format='%(asctime)s:%(message)s')
         self.initUI()
 
     def initUI(self):
