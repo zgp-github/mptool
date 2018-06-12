@@ -7,11 +7,11 @@ import configparser
 import random
 
 from pcbafts_station import PCBAFTS
-from page2 import page2
-from page3 import page3
+from assemblypair_station import ASSEMBLY_PAIR
+from assemblyfts_station import ASSEMBLYFTS
 from ml1_station import ML1
 from gcl_station import GCL
-from page6 import page6
+from repair_station import REPAIR
 
 class Main_Page(QTabWidget):
     def __init__(self, parent=None):
@@ -30,11 +30,11 @@ class Main_Page(QTabWidget):
             self.PCBA_FTS_PAGE = PCBAFTS()
             self.addTab(self.PCBA_FTS_PAGE, u"单板FTS测试工站")
         elif station == "ASSEMBLY_PAIR":
-            self.page2 = page2()
-            self.addTab(self.page2, u"组装线配对测试工站")
+            self.assemblypair_station = ASSEMBLY_PAIR()
+            self.addTab(self.assemblypair_station, u"组装线配对测试工站")
         elif station == "ASSEMBLY_FTS":
-            self.page3 = page3()
-            self.addTab(self.page3, u"组装线FTS测试工站")
+            self.assemblyfts_station = ASSEMBLYFTS()
+            self.addTab(self.assemblyfts_station, u"组装线FTS测试工站")
         elif station == "ASSEMBLY_ML1":
             self.ml1_station = ML1()
             self.addTab(self.ml1_station, u"ML1打印工站")
@@ -42,8 +42,8 @@ class Main_Page(QTabWidget):
             self.gcl_station = GCL()
             self.addTab(self.gcl_station, u"入箱工站")
         elif station == "ASSEMBLY_REPAIR":
-            self.page6 = page6()
-            self.addTab(self.page6, u"维修工站")
+            self.repair_station = REPAIR()
+            self.addTab(self.repair_station, u"维修工站")
     
     # overwrite the window close function
     def closeEvent(self, event):
