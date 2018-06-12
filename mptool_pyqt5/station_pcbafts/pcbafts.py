@@ -208,7 +208,7 @@ class PCBAFTS(QDialog):
         print("upload result:", upload_result)
         self._signal_update.emit(dataList)
         while self.thread_get_FTS_data == True:
-            data = fts_data().get_Tests_data()
+            data = database().get_Tests_data()
             print("get fts data in FTS station: ", data)
 
             id = data[0]
