@@ -6,12 +6,12 @@ import os.path
 import configparser
 import random
 
-from pcbafts_station import PCBAFTS
-from assemblypair_station import ASSEMBLY_PAIR
-from assemblyfts_station import ASSEMBLYFTS
-from ml1_station import ML1
-from gcl_station import GCL
-from repair_station import REPAIR
+from station_pcbafts.pcbafts import PCBAFTS
+from station_assemblypair.assemblypair import ASSEMBLY_PAIR
+from station_assemblyfts.assemblyfts import ASSEMBLYFTS
+from station_ml1.ml1 import ML1
+from station_gcl.gcl import GCL
+from station_repair.repair import REPAIR
 
 class Main_Page(QTabWidget):
     def __init__(self, parent=None):

@@ -11,8 +11,8 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
-from fts_data import fts_data
-from net import network
+from station_pcbafts.fts_data import fts_data
+from station_pcbafts.net import network
 
 class PCBAFTS(QDialog):
     thread_get_FTS_data = False

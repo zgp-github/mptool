@@ -11,8 +11,6 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
-from fts_data import fts_data
-from net import network
 
 class ML1(QDialog):
     def __init__(self, parent=None):
