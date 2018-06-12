@@ -42,7 +42,7 @@ class ML1(QDialog):
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
 
-        self.table = QTableWidget(3, 2)
+        self.table = QTableWidget(2, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -63,18 +63,13 @@ class ML1(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器状态")
-        self.table.setItem(2, 0, newItem)
-        newItem = QTableWidgetItem("None")
-        self.table.setItem(2, 1, newItem)
-
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
         layout.setColumnStretch(2, 30)
         self.gridGroupBox.setLayout(layout)
 
     def create_info_show(self):
-        self.QGroupBox_info_show = QGroupBox("运行信息")
+        self.QGroupBox_info_show = QGroupBox("提示信息")
         layout = QFormLayout()
         print("ML1 info show for the process logs")
         self.bigEditor = QTextEdit()
