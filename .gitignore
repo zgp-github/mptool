@@ -5,3 +5,4 @@ mptool_pyqt5.spec
 dist
 build
 __pycache__
+config.ini

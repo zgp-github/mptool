@@ -27,7 +27,6 @@ class page4(QDialog):
         mainLayout.addWidget(self.gridGroupBox)
         self.setLayout(mainLayout)
 
-
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
@@ -37,7 +36,7 @@ class page4(QDialog):
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 0, 1)
 
-        self.msg_show = QLabel("请扫描配对命令码")
+        self.msg_show = QLabel("请扫描需要打印ML1的MAC地址")
         self.msg_show.setFont(QFont("Microsoft YaHei", 20))
         layout.addWidget(self.msg_show, 1, 1)
 
