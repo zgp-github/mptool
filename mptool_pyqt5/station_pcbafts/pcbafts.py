@@ -35,7 +35,6 @@ class PCBAFTS(QDialog):
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
         self.setLayout(mainLayout)
-
         self.gets_fts_data()
 
         # It is a timer test code
@@ -47,19 +46,23 @@ class PCBAFTS(QDialog):
     def onTimerOut(self):
         self.bigEditor.append("timer test...")
         self.timer.stop()
+    
+    def set_focus(self):
+        self.cmd_input.setFocus()
 
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
+
+        self.msg_show = QLabel("订单信息:")
+        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
+        layout.addWidget(self.msg_show, 0, 1)
+
         self.cmd_input = QLineEdit(self)
         self.cmd_input.setFont(QFont("Microsoft YaHei", 25))
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
-        layout.addWidget(self.cmd_input, 0, 1)
-
-        self.msg_show = QLabel("请扫描配对命令码")
-        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
-        layout.addWidget(self.msg_show, 1, 1)
+        layout.addWidget(self.cmd_input, 1, 1)
 
         self.table = QTableWidget(5, 2)
         # auto adapt the width
@@ -140,7 +143,7 @@ class PCBAFTS(QDialog):
         layout = QFormLayout()
         print("info show for the process logs")
         self.bigEditor = QTextEdit()
-        self.bigEditor.setPlainText("log shows in here")
+        self.bigEditor.setPlainText("请扫描配对命令码")
         self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
         cursor = self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)

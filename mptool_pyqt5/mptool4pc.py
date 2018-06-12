@@ -35,8 +35,9 @@ class Main_Page(QTabWidget):
         logging.debug('--------------------------MPTOOL4PC Start--------------------------')
         logging.debug('main page station config:'+station)
         if station == "PCBA_FTS":
-            self.PCBA_FTS_PAGE = PCBAFTS()
-            self.addTab(self.PCBA_FTS_PAGE, u"单板FTS测试工站")
+            self.pcbafts_station = PCBAFTS()
+            self.addTab(self.pcbafts_station, u"单板FTS测试工站")
+            self.pcbafts_station.set_focus()
         elif station == "ASSEMBLY_PAIR":
             self.assemblypair_station = ASSEMBLY_PAIR()
             self.addTab(self.assemblypair_station, u"组装线配对测试工站")
@@ -66,7 +67,7 @@ class Main_Page(QTabWidget):
         logging.debug('--------------------------MPTOOL4PC End----------------------------')
         station = self.station_config()
         if station == "PCBA_FTS":
-            self.PCBA_FTS_PAGE.thread_get_FTS_data = False
+            self.pcbafts_station.thread_get_FTS_data = False
 
     def station_config(self):
         config = 'config.ini'
