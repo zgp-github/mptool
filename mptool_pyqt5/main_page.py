@@ -14,13 +14,14 @@ from station_gcl.gcl import GCL
 from station_repair.repair import REPAIR
 
 class Main_Page(QTabWidget):
+    logs_path = "logs"
     def __init__(self, parent=None):
         super(Main_Page, self).__init__(parent)
         title = 'MPTOOL4PC .IO NGxx Version 0.1'
         self.setWindowTitle(title)
         screenRect = QApplication.instance().desktop().availableGeometry()
         # get the screen width and height
-        width = screenRect.width()*80/100
+        width = screenRect.width()*60/100
         height = screenRect.height()*70/100
         self.resize(width, height)
 
@@ -45,7 +46,15 @@ class Main_Page(QTabWidget):
         elif station == "ASSEMBLY_REPAIR":
             self.repair_station = REPAIR()
             self.addTab(self.repair_station, u"维修工站")
-    
+        self.create_logs_path()
+
+    def create_logs_path(self):
+        print("main page create the logs path")
+        if os.path.exists(self.logs_path):
+            pass
+        else:
+            os.makedirs(self.logs_path)
+
     # overwrite the window close function
     def closeEvent(self, event):
         print("closeEvent: ", event)
