@@ -14,6 +14,8 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
+import socket
+import re
 
 class ML1(QDialog):
     def __init__(self, parent=None):
@@ -93,3 +95,27 @@ class ML1(QDialog):
         self.bigEditor.setText(cmd)
         print(cmd)
         self.cmd_input.clear()
+
+        # test secket
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        print("host:", host_name, host_ip)
+
+        check = self.mac_check(cmd)
+        if check == False:
+            self.bigEditor.append("无效的MAC地址:"+cmd)
+        print(check)
+
+
+    def mac_check(self, addr):
+        valid = re.compile(r''' 
+            (^([0-9A-F]{1,2}[-]){5}([0-9A-F]{1,2})$ 
+            |^([0-9A-F]{1,2}[:]){5}([0-9A-F]{1,2})$ 
+            |^([0-9A-F]{1,2}[.]){5}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}){5}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[-]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[:]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[.]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}){7}([0-9A-F]{1,2})$) 
+            ''',re.VERBOSE | re.IGNORECASE)
+        return valid.match(addr) is not None
