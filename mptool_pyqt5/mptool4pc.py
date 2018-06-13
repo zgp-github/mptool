@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from PyQt5.QtWidgets import QApplication, QComboBox, QDialog, QTabWidget
+from PyQt5.QtWidgets import QApplication, QComboBox, QDialog, QTabWidget, QMessageBox
 from PyQt5.QtWidgets import *
 import os.path
 import configparser
@@ -34,6 +34,7 @@ class Main_Page(QTabWidget):
                             format='%(asctime)s:%(message)s')
         logging.debug('--------------------------MPTOOL4PC Start--------------------------')
         logging.debug('main page station config:'+station)
+
         if station == "PCBA_FTS":
             self.pcbafts_station = PCBAFTS()
             self.addTab(self.pcbafts_station, u"单板FTS测试工站")
@@ -93,6 +94,8 @@ class Main_Page(QTabWidget):
 
         conf.read(config)
         station = conf.get('Mptool4PC', 'STATION')
+        ip = conf.get('Mptool4PC', 'TN4CIOIP')
+        self.warm_msg_show = "工站: "+station+"\n"+"服务器IP地址: "+ip
         return station
 
 if __name__ == '__main__':
@@ -100,4 +103,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     t = Main_Page()
     t.show()
+    msg_box = QMessageBox(QMessageBox.Warning, "配置信息", t.warm_msg_show)
+    msg_box.show()
     app.exec_()
