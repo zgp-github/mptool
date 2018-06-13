@@ -88,14 +88,23 @@ class Main_Page(QTabWidget):
             conf.set("Mptool4PC", "#station4", "ASSEMBLY_ML1")
             conf.set("Mptool4PC", "#station5", "ASSEMBLY_GCL")
             conf.set("Mptool4PC", "#station6", "ASSEMBLY_REPAIR")
-
-            conf.set("Mptool4PC", "TN4CIOIP", "192.168.10.150")
+            conf.add_section("TN4CIO")
+            conf.set("TN4CIO", "TN4CIOIP", "192.168.10.150")
+            conf.add_section("Printer")
+            conf.set("Printer", "ml1_printer", "POSTEK G-3106")
+            conf.set("Printer", "pl2_printer", "POSTEK G-3106_2")
             conf.write(open(config, "w"))
 
         conf.read(config)
         station = conf.get('Mptool4PC', 'STATION')
-        ip = conf.get('Mptool4PC', 'TN4CIOIP')
-        self.warm_msg_show = "工站: "+station+"\n"+"服务器IP地址: "+ip
+        ip = conf.get('TN4CIO', 'TN4CIOIP')
+        ml1 = conf.get('Printer', 'ml1_printer')
+        pl2 = conf.get('Printer', 'pl2_printer')
+        self.warm_msg_show = "\
+            工站: "+station+"\n"+\
+            "服务器IP地址: "+ip+"\n"+\
+            "ML1打印机: "+ml1+"\n"+\
+            "PL2打印机: "+pl2
         return station
 
 if __name__ == '__main__':

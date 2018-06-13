@@ -24,7 +24,7 @@ class network():
         if os.path.exists(config):
             print("config.ini exist")
             conf.read(config)
-            tn4cioip = conf.get('Mptool4PC', 'TN4CIOIP')
+            tn4cioip = conf.get('TN4CIO', 'TN4CIOIP')
             print("--------------------------------------------------------------tn4cioip:", tn4cioip)
         tmp = str(random.randint(1,1000))
         network.url = "http://"+tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/update_NGxx_mac_to_database/"+tmp

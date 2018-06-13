@@ -16,11 +16,14 @@ from threading import Timer
 from time import *
 import socket
 import re
+from station_ml1.net import network
+from station_ml1.ml1_printer import printer
 
 class ML1(QDialog):
     def __init__(self, parent=None):
         super(ML1, self).__init__(parent)
         self.initUI()
+        self.init_data()
 
     def initUI(self):
         print("ml1 station initUI")
@@ -31,6 +34,11 @@ class ML1(QDialog):
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
         self.setLayout(mainLayout)
+
+    def init_data(self):
+        self.ml1_printer = printer()
+        printer_list = self.ml1_printer.list()
+        print(printer_list)
 
     def set_focus(self):
         self.cmd_input.setFocus()
@@ -48,7 +56,7 @@ class ML1(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
-        self.cmd_input.returnPressed.connect(self.updateUi)
+        self.cmd_input.returnPressed.connect(self.handle_cmd)
 
         self.table = QTableWidget(2, 2)
         # auto adapt the width
@@ -90,7 +98,7 @@ class ML1(QDialog):
         layout.addRow(self.bigEditor)
         self.QGroupBox_info_show.setLayout(layout)
 
-    def updateUi(self):
+    def handle_cmd(self):
         cmd = self.cmd_input.text()
         self.bigEditor.setText(cmd)
         print(cmd)
@@ -104,8 +112,11 @@ class ML1(QDialog):
         check = self.mac_check(cmd)
         if check == False:
             self.bigEditor.append("无效的MAC地址:"+cmd)
-        print(check)
-
+        else:
+            ml1 = network()
+            msg = ml1.request_print(cmd)
+            self.bigEditor.append(msg)
+            self.printTest()
 
     def mac_check(self, addr):
         valid = re.compile(r''' 
@@ -119,3 +130,8 @@ class ML1(QDialog):
             |^([0-9A-F]{1,2}){7}([0-9A-F]{1,2})$) 
             ''',re.VERBOSE | re.IGNORECASE)
         return valid.match(addr) is not None
+
+    def printTest(self):
+        html = 'printer test...'
+        p = "POSTEK G-3106"  # 打印机名称
+        self.ml1_printer.printing(p, html)
