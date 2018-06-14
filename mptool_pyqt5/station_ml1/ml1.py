@@ -56,6 +56,8 @@ class ML1(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
+
+        self.cmd_input.setText("4910212021234585")
         self.cmd_input.returnPressed.connect(self.handle_cmd)
 
         self.table = QTableWidget(2, 2)
@@ -102,9 +104,9 @@ class ML1(QDialog):
         cmd = self.cmd_input.text()
         self.bigEditor.setText(cmd)
         print(cmd)
-        self.cmd_input.clear()
+        # self.cmd_input.clear()
 
-        # test secket
+        # test socket
         host_name = socket.gethostname()
         host_ip = socket.gethostbyname(host_name)
         print("host:", host_name, host_ip)
@@ -116,7 +118,6 @@ class ML1(QDialog):
             ml1 = network()
             msg = ml1.request_print(cmd)
             self.bigEditor.append(msg)
-            self.printTest()
 
     def mac_check(self, addr):
         valid = re.compile(r''' 
@@ -133,5 +134,4 @@ class ML1(QDialog):
 
     def printTest(self):
         html = 'printer test...'
-        p = "POSTEK G-3106"  # 打印机名称
-        self.ml1_printer.printing(p, html)
+        self.ml1_printer.printing(html)

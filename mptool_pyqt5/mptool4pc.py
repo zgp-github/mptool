@@ -113,5 +113,5 @@ if __name__ == '__main__':
     t = Main_Page()
     t.show()
     msg_box = QMessageBox(QMessageBox.Warning, "配置信息", t.warm_msg_show)
-    msg_box.show()
+    # msg_box.show()
     app.exec_()
