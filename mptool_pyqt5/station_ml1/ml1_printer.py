@@ -29,7 +29,7 @@ class printer():
         print("printer list:", printer)
         return printer
 
-    def printing(self, context):
+    def printing(self, file):
         printer = self.ml1_printer
         printerInfo = QPrinterInfo()
         p = QPrinter()
@@ -37,11 +37,11 @@ class printer():
             if printer == item.printerName():
                 p = QPrinter(item)
 
-        print("get context:", context)
+        print("get file:", file)
         print("dpix", p.logicalDpiX(), p.logicalDpiY())
 
         image = QImage()
-        image.load(context)
+        image.load(file)
         painter = QPainter()
 
         # rect = painter.viewport()
@@ -52,7 +52,6 @@ class printer():
         # print(rect.x(), rect.y(), size.width(), size.height())
         # #painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
         # #painter.setWindow(image.rect())
-
 
         print("image rect:", image.rect())
         # set the printer DPI(POSTEK G-3106 300)
