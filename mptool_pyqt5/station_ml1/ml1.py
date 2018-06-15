@@ -17,7 +17,9 @@ from time import *
 import socket
 import re
 from station_ml1.net import network
+from PyQt5.QtGui import QImage, QPainter, QTextDocument
 from station_ml1.ml1_printer import printer
+from PyQt5.QtCore import QUrl
 
 class ML1(QDialog):
     def __init__(self, parent=None):
@@ -92,32 +94,43 @@ class ML1(QDialog):
         print("ML1 info show for the process logs")
         self.bigEditor = QTextEdit()
         self.bigEditor.setPlainText("请扫描需要打印ML1的传感器MAC地址")
-        self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
+        self.bigEditor.setFont(QFont("Microsoft YaHei", 15))
         cursor = self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
+        self.bigEditor.setReadOnly(True)
 
         layout.addRow(self.bigEditor)
         self.QGroupBox_info_show.setLayout(layout)
 
     def handle_cmd(self):
-        cmd = self.cmd_input.text()
-        self.bigEditor.setText(cmd)
-        print(cmd)
+        mac = self.cmd_input.text()
+        print(mac)
         # self.cmd_input.clear()
+        tmp = QTableWidgetItem(mac)
+        self.table.setItem(0, 1, tmp)
 
         # test socket
         host_name = socket.gethostname()
         host_ip = socket.gethostbyname(host_name)
         print("host:", host_name, host_ip)
 
-        check = self.mac_check(cmd)
+        check = self.mac_check(mac)
         if check == False:
-            self.bigEditor.append("无效的MAC地址:"+cmd)
+            self.bigEditor.append("无效的MAC地址:"+mac)
         else:
             ml1 = network()
-            msg = ml1.request_print(cmd)
+            msg = ml1.request_print(mac)
             self.bigEditor.append(msg)
+
+            self.bigEditor.clear()
+            file = os.path.join(os.getcwd(), "ml1.png")
+            img = QImage(file, 'PNG')
+            cursor = QTextCursor(self.bigEditor.document())
+            cursor.insertText("打印ML1成功\n")
+            cursor.insertImage(img)
+
+
 
     def mac_check(self, addr):
         valid = re.compile(r''' 
