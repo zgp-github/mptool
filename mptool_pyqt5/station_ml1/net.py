@@ -41,32 +41,26 @@ class network():
             msg_type = text['messages'][0]['type']
             msg = text['messages'][0]['message']
             if msg_type == "fail":
-                pass
+                if msg == "find mac fail":
+                    return "找不到MAC:"+mac+" 传感器"
+                elif msg == "label file not fond":
+                    return "找不到ML1文件"
             elif msg_type == "ok":
                 url = text['result'][0]
                 print(url)
                 ml1 = os.path.join(os.getcwd(), "ml1.png")
                 try:
-                    urlretrieve(url, ml1)
+                    urlretrieve(url, ml1, self.start_printing(ml1))
+                    return("download_success:"+ml1)
                 finally:
                     urlcleanup()
-                if os.path.exists(ml1):
-                    self.ml1_printer.printing(ml1)
-                else:
-                    return "ml1 download fail"
             else:
                 print("ml1_print error")
             return msg
-
-
-
-
-
-
-
-
-
-            return "ok"
         except Exception as e:
             print("Error: network upload data Exception:", e)
             return "newtwork_error"
+
+    def start_printing(self, file):
+        img = file
+        self.ml1_printer.printing(img)

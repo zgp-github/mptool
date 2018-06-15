@@ -106,14 +106,12 @@ class ML1(QDialog):
     def handle_cmd(self):
         mac = self.cmd_input.text()
         print(mac)
-        # self.cmd_input.clear()
-        tmp = QTableWidgetItem(mac)
-        self.table.setItem(0, 1, tmp)
 
-        # test socket
-        host_name = socket.gethostname()
-        host_ip = socket.gethostbyname(host_name)
-        print("host:", host_name, host_ip)
+        # clean data first before show
+        self.cmd_input.clear()
+        self.bigEditor.clear()
+        tmp = QTableWidgetItem("None")
+        self.table.setItem(0, 1, tmp)
 
         check = self.mac_check(mac)
         if check == False:
@@ -121,16 +119,17 @@ class ML1(QDialog):
         else:
             ml1 = network()
             msg = ml1.request_print(mac)
-            self.bigEditor.append(msg)
-
-            self.bigEditor.clear()
-            file = os.path.join(os.getcwd(), "ml1.png")
-            img = QImage(file, 'PNG')
-            cursor = QTextCursor(self.bigEditor.document())
-            cursor.insertText("打印ML1成功\n")
-            cursor.insertImage(img)
-
-
+            if "download_success:" in msg:
+                tmp = QTableWidgetItem(mac)
+                self.table.setItem(0, 1, tmp)
+                path = msg.split(':', 1)[1]
+                self.bigEditor.clear()
+                img = QImage(path, 'PNG')
+                cursor = QTextCursor(self.bigEditor.document())
+                cursor.insertText("打印ML1成功\n")
+                cursor.insertImage(img)
+            else:
+                self.bigEditor.setText(msg)
 
     def mac_check(self, addr):
         valid = re.compile(r''' 
