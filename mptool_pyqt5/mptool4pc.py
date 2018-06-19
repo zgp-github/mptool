@@ -91,8 +91,9 @@ class Main_Page(QTabWidget):
             conf.add_section("TN4CIO")
             conf.set("TN4CIO", "TN4CIOIP", "192.168.10.150")
             conf.add_section("Printer")
-            conf.set("Printer", "ml1_printer", "POSTEK G-3106")
-            conf.set("Printer", "pl2_printer", "POSTEK G-3106_2")
+            conf.set("Printer", "ml1_printer", "POSTEK G-3106_ml1")
+            conf.set("Printer", "pl2_printer", "POSTEK G-3106_pl2")
+            conf.set("Printer", "gcl_printer", "printer_gcl_name")
             conf.write(open(config, "w"))
 
         conf.read(config)
