@@ -120,6 +120,7 @@ class ML1(QDialog):
         else:
             tmp = QTableWidgetItem(mac)
             self.table.setItem(0, 1, tmp)
+
             net = network()
             msg = net.request_ml1_label(mac)
             text = json.loads(msg)
@@ -134,6 +135,9 @@ class ML1(QDialog):
                     self.bigEditor.setText(info)
             elif msg_type == "ok":
                 url = text['result'][0]
+                sensor_type = text['result'][1]
+                tmp = QTableWidgetItem(sensor_type)
+                self.table.setItem(1, 1, tmp)
                 print(url)
                 ml1 = os.path.join(os.getcwd(), "ml1.png")
                 try:
