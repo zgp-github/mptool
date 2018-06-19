@@ -105,7 +105,7 @@ class GCL(QDialog):
         elif cmd == "GCLID_END":
             print("get cmd: GCLID_END")
         elif self.GCLID_START_STATUS == True:
-            mac =  cmd
+            mac = cmd
             check = self.mac_check(mac)
             if check == False:
                 self.gcl_info_show.setText("无效的MAC地址:"+mac)
@@ -132,7 +132,7 @@ class GCL(QDialog):
             return False
         else:
             return True
-        
+
     def mac_check(self, addr):
         valid = re.compile(r''' 
             (^([0-9A-F]{1,2}[-]){5}([0-9A-F]{1,2})$ 
