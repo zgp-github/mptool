@@ -16,10 +16,11 @@ from threading import Timer
 from time import *
 import socket
 import re
+import json
 from station_ml1.net import network
 from PyQt5.QtGui import QImage, QPainter, QTextDocument
+from urllib.request import urlretrieve, urlcleanup
 from station_ml1.ml1_printer import printer
-from PyQt5.QtCore import QUrl
 
 class ML1(QDialog):
     def __init__(self, parent=None):
@@ -117,19 +118,41 @@ class ML1(QDialog):
         if check == False:
             self.bigEditor.append("无效的MAC地址:"+mac)
         else:
-            ml1 = network()
-            msg = ml1.request_print(mac)
-            if "download_success:" in msg:
-                tmp = QTableWidgetItem(mac)
-                self.table.setItem(0, 1, tmp)
-                path = msg.split(':', 1)[1]
-                self.bigEditor.clear()
-                img = QImage(path, 'PNG')
-                cursor = QTextCursor(self.bigEditor.document())
-                cursor.insertText("打印ML1成功\n")
-                cursor.insertImage(img)
+            tmp = QTableWidgetItem(mac)
+            self.table.setItem(0, 1, tmp)
+            net = network()
+            msg = net.request_ml1_label(mac)
+            text = json.loads(msg)
+            msg_type = text['messages'][0]['type']
+            msg = text['messages'][0]['message']
+            if msg_type == "fail":
+                if msg == "find mac fail":
+                    info = "找不到MAC:"+mac+" 传感器"
+                    self.bigEditor.setText(info)
+                elif msg == "label file not fond":
+                    info =  "找不到ML1文件"
+                    self.bigEditor.setText(info)
+            elif msg_type == "ok":
+                url = text['result'][0]
+                print(url)
+                ml1 = os.path.join(os.getcwd(), "ml1.png")
+                try:
+                    # download the ml1 label file
+                    urlretrieve(url, ml1, self.start_printing(ml1))
+                    print("download_success:" +ml1)
+                finally:
+                    urlcleanup()
             else:
-                self.bigEditor.setText(msg)
+                print("ml1_print error:", msg)
+
+    def start_printing(self, file):
+        img = file
+        self.ml1_printer.printing(img)
+        self.bigEditor.clear()
+        preview = QImage(img, 'PNG')
+        cursor = QTextCursor(self.bigEditor.document())
+        cursor.insertText("打印ML1成功\n")
+        cursor.insertImage(preview)
 
     def mac_check(self, addr):
         valid = re.compile(r''' 

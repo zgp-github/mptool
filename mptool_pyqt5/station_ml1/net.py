@@ -8,6 +8,7 @@ import configparser
 import random
 from urllib.request import urlretrieve, urlcleanup
 from station_ml1.ml1_printer import printer
+import logging
 
 class network():
     headers = {'content-type': "application/json"}
@@ -31,36 +32,14 @@ class network():
         self.get_ml1_url = "http://"+tn4cioip + \
             "/tn4cio/srv/copies_NGxx/app.php/get_ml1_label_url/"+tmp
 
-    def request_print(self, mac):
+    def request_ml1_label(self, mac):
         body = {"macaddress": mac}
         try:
             response = requests.post(self.get_ml1_url, data=json.dumps(body), headers=network.headers, timeout=5)
-
-            print("response.text", response.text)
-            text = json.loads(response.text)
-            msg_type = text['messages'][0]['type']
-            msg = text['messages'][0]['message']
-            if msg_type == "fail":
-                if msg == "find mac fail":
-                    return "找不到MAC:"+mac+" 传感器"
-                elif msg == "label file not fond":
-                    return "找不到ML1文件"
-            elif msg_type == "ok":
-                url = text['result'][0]
-                print(url)
-                ml1 = os.path.join(os.getcwd(), "ml1.png")
-                try:
-                    urlretrieve(url, ml1, self.start_printing(ml1))
-                    return("download_success:"+ml1)
-                finally:
-                    urlcleanup()
-            else:
-                print("ml1_print error")
-            return msg
+            ret = response.text
+            print("request ml1 label response:", ret)
+            logging.debug(ret)
+            return ret
         except Exception as e:
             print("Error: network upload data Exception:", e)
             return "newtwork_error"
-
-    def start_printing(self, file):
-        img = file
-        self.ml1_printer.printing(img)
