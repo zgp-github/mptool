@@ -111,8 +111,10 @@ class ML1(QDialog):
         # clean data first before show
         self.cmd_input.clear()
         self.bigEditor.clear()
-        tmp = QTableWidgetItem("None")
-        self.table.setItem(0, 1, tmp)
+        tmp1 = QTableWidgetItem("None")
+        self.table.setItem(0, 1, tmp1)
+        tmp2 = QTableWidgetItem("None")
+        self.table.setItem(1, 1, tmp2)
 
         check = self.mac_check(mac)
         if check == False:
