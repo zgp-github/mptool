@@ -101,11 +101,13 @@ class Main_Page(QTabWidget):
         ip = conf.get('TN4CIO', 'TN4CIOIP')
         ml1 = conf.get('Printer', 'ml1_printer')
         pl2 = conf.get('Printer', 'pl2_printer')
+        gcl = conf.get('Printer', 'gcl_printer')
         self.warm_msg_show = "\
             工站: "+station+"\n"+\
             "服务器IP地址: "+ip+"\n"+\
             "ML1打印机: "+ml1+"\n"+\
-            "PL2打印机: "+pl2
+            "PL2打印机: "+pl2+"\n"+\
+            "GCL打印机: "+gcl
         return station
 
 if __name__ == '__main__':
