@@ -86,7 +86,7 @@ class GCL(QDialog):
         layout = QFormLayout()
         print("gcl info show for the process logs")
         self.gcl_info_show = QTextEdit()
-        self.gcl_info_show.setPlainText("请扫描需要打印GCL的传感器MAC地址")
+        self.gcl_info_show.setPlainText("请扫描开始入箱的命令码")
         self.gcl_info_show.setFont(QFont("Microsoft YaHei", 15))
         cursor = self.gcl_info_show.textCursor()
         cursor.movePosition(QTextCursor.End)
