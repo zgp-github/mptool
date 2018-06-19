@@ -12,6 +12,8 @@ import threading
 from threading import Timer
 from time import *
 import re
+import json
+from station_gcl.net import network
 
 class GCL(QDialog):
     def __init__(self, parent=None):
@@ -29,7 +31,8 @@ class GCL(QDialog):
         self.init_data()
 
     def init_data(self):
-        self.GCLID_START_STATUS = False
+        self.net = network()
+        self.GCLID_STATUS = None
         self.gcl_array = []
 
     def create_cmd_input(self):
@@ -99,19 +102,33 @@ class GCL(QDialog):
         self.cmd_input.clear()
 
         if cmd == "GCLID_START":
-            print("get cmd: GCLID_START")
-            self.GCLID_START_STATUS = True
+            self.GCLID_STATUS = "START"
             self.gcl_info_show.setText("启动入箱,请扫描需要入箱的传感器MAC地址")
         elif cmd == "GCLID_END":
-            print("get cmd: GCLID_END")
-        elif self.GCLID_START_STATUS == True:
-            mac = cmd
-            check = self.mac_check(mac)
-            if check == False:
-                self.gcl_info_show.setText("无效的MAC地址:"+mac)
-            else:
-                check2 = self.mac_in_gcl_array(mac)
-                if check2 == True:
+            pass
+        elif self.GCLID_STATUS == "START":
+            self.gcl_start(cmd)
+        elif self.GCLID_STATUS == "END":
+            self.gcl_end()
+        else:
+            print("cmd:"+cmd+" not support")
+            self.gcl_info_show.setText("命令:"+cmd+" 不支持!")
+
+    def gcl_start(self, macaddress):
+        print("gcl_start")
+        mac = macaddress
+        check = self.mac_check(mac)
+        if check == False:
+            self.gcl_info_show.setText("无效的MAC地址:"+mac)
+        else:
+            check2 = self.mac_in_gcl_array(mac)
+            if check2 == True:
+                msg = self.net.check_mac_valid(mac)
+                text = json.loads(msg)
+                msg_type = text['messages'][0]['type']
+                if msg_type == "fail":
+                    self.gcl_info_show.setText("错误MAC:"+mac+" 不在数据库中")
+                else:
                     m = QTableWidgetItem(mac)
                     self.table.setItem(0, 1, m)
                     self.gcl_array.append(mac)
@@ -119,11 +136,12 @@ class GCL(QDialog):
                     tmp = QTableWidgetItem(str(count))
                     self.table.setItem(2, 1, tmp)
                     self.gcl_info_show.setText("MAC地址:"+mac)
-                else:
-                    pass
-        else:
-            print("cmd:"+cmd+" not support")
-            self.gcl_info_show.setText("命令:"+cmd+" 不支持!")
+            else:
+                pass
+
+    def gcl_end(self):
+        print("gcl_end")
+        self.GCLID_STATUS = None
 
     def mac_in_gcl_array(self, mac):
         if mac in self.gcl_array:
