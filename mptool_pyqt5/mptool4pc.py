@@ -51,6 +51,7 @@ class Main_Page(QTabWidget):
         elif station == "ASSEMBLY_GCL":
             self.gcl_station = GCL()
             self.addTab(self.gcl_station, u"入箱工站")
+            self.gcl_station.cmd_input.setFocus()
         elif station == "ASSEMBLY_REPAIR":
             self.repair_station = REPAIR()
             self.addTab(self.repair_station, u"维修工站")

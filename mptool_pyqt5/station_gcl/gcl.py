@@ -39,6 +39,7 @@ class GCL(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
+        self.cmd_input.returnPressed.connect(self.handle_cmd)
 
         self.table = QTableWidget(2, 2)
         # auto adapt the width
@@ -72,7 +73,7 @@ class GCL(QDialog):
         print("gcl info show for the process logs")
         self.gcl_info_show = QTextEdit()
         self.gcl_info_show.setPlainText("请扫描需要打印GCL的传感器MAC地址")
-        self.gcl_info_show.setFont(QFont("Microsoft YaHei", 10))
+        self.gcl_info_show.setFont(QFont("Microsoft YaHei", 15))
         cursor = self.gcl_info_show.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.gcl_info_show.setTextCursor(cursor)
@@ -80,3 +81,14 @@ class GCL(QDialog):
 
         layout.addRow(self.gcl_info_show)
         self.QGroupBox_info_show.setLayout(layout)
+
+    def handle_cmd(self):
+        cmd = self.cmd_input.text()
+        print("get cmd:", cmd)
+
+        self.cmd_input.clear()
+        if cmd == "GCLID_START":
+            print("get cmd: GCLID_START")
+        else:
+            print("cmd:"+cmd+" not support")
+            self.gcl_info_show.setText("命令:"+cmd+" 不支持!")
