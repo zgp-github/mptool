@@ -30,8 +30,7 @@ class Main_Page(QTabWidget):
         self.create_logs_path()
 
         station = self.station_config()
-        logging.basicConfig(filename=self.log_file, level=logging.DEBUG,
-                            format='%(asctime)s:%(message)s')
+        logging.basicConfig(filename=self.log_file, level=logging.DEBUG, format='%(asctime)s:%(message)s')
         logging.debug('--------------------------MPTOOL4PC Start--------------------------')
         logging.debug('main page station config:'+station)
 

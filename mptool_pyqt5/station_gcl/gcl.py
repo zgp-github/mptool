@@ -21,11 +21,9 @@ class GCL(QDialog):
         print("gcl station initUI")
         self.create_cmd_input()
         self.create_info_show()
-
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
-
         self.setLayout(mainLayout)
 
     def create_cmd_input(self):
@@ -72,12 +70,13 @@ class GCL(QDialog):
         self.QGroupBox_info_show = QGroupBox("提示信息")
         layout = QFormLayout()
         print("gcl info show for the process logs")
-        self.bigEditor = QTextEdit()
-        self.bigEditor.setPlainText("请扫描需要打印GCL的传感器MAC地址")
-        self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
-        cursor = self.bigEditor.textCursor()
+        self.gcl_info_show = QTextEdit()
+        self.gcl_info_show.setPlainText("请扫描需要打印GCL的传感器MAC地址")
+        self.gcl_info_show.setFont(QFont("Microsoft YaHei", 10))
+        cursor = self.gcl_info_show.textCursor()
         cursor.movePosition(QTextCursor.End)
-        self.bigEditor.setTextCursor(cursor)
+        self.gcl_info_show.setTextCursor(cursor)
+        self.gcl_info_show.setReadOnly(True)
 
-        layout.addRow(self.bigEditor)
+        layout.addRow(self.gcl_info_show)
         self.QGroupBox_info_show.setLayout(layout)

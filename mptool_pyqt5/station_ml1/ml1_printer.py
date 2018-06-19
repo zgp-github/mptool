@@ -37,8 +37,7 @@ class printer():
             if printer == item.printerName():
                 p = QPrinter(item)
 
-        print("get file:", file)
-        print("dpix", p.logicalDpiX(), p.logicalDpiY())
+        print("printer get file:", file)
 
         image = QImage()
         image.load(file)
