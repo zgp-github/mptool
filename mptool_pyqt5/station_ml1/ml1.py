@@ -19,7 +19,7 @@ import re
 import json
 from station_ml1.net import network
 from PyQt5.QtGui import QImage, QPainter, QTextDocument
-from urllib.request import urlretrieve, urlcleanup
+from urllib.request import urlretrieve, urlcleanup, urlopen
 from station_ml1.ml1_printer import printer
 
 class ML1(QDialog):
@@ -50,9 +50,9 @@ class ML1(QDialog):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
 
-        self.msg_show = QLabel("订单信息:")
-        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
-        layout.addWidget(self.msg_show, 0, 1)
+        # self.msg_show = QLabel("订单信息:")
+        # self.msg_show.setFont(QFont("Microsoft YaHei", 20))
+        # layout.addWidget(self.msg_show, 0, 1)
 
         self.cmd_input = QLineEdit(self)
         self.cmd_input.setFont(QFont("Microsoft YaHei", 25))
@@ -60,7 +60,7 @@ class ML1(QDialog):
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
 
-        self.cmd_input.setText("4910212021234585")
+        # self.cmd_input.setText("4910212021234585")
         self.cmd_input.returnPressed.connect(self.handle_cmd)
 
         self.table = QTableWidget(2, 2)
@@ -137,19 +137,40 @@ class ML1(QDialog):
                     self.bigEditor.setText(info)
             elif msg_type == "ok":
                 url = text['result'][0]
+                print(url)
+
+                self.print_data = urlopen(url).read()
+                # print(self.print_data)
+
                 sensor_type = text['result'][1]
                 tmp = QTableWidgetItem(sensor_type)
                 self.table.setItem(1, 1, tmp)
-                print(url)
-                ml1 = os.path.join(os.getcwd(), "ml1.png")
                 try:
-                    # download the ml1 label file
-                    urlretrieve(url, ml1, self.start_printing(ml1))
+                    # remove the file first
+                    ml1 = os.path.join(os.getcwd(), "ml1.png")
+                    if os.path.exists(ml1):
+                        os.unlink(ml1)
+                    # download the ml1 file
+                    urlretrieve(url, ml1, self.download_callback)
                     print("download_success:" +ml1)
+                    if self.per == 100:
+                        sleep(0.1)
+                        ml1 = os.path.join(os.getcwd(), "ml1.png")
+                        self.start_printing(ml1)
+                        self.per = 0
+                except Exception as e:
+                    print("dowmload error:", e)
                 finally:
                     urlcleanup()
             else:
                 print("ml1_print error:", msg)
+
+    def download_callback(self, a, b, c):
+        # download percent
+        self.per = 100.0*a*b/c
+        if self.per > 100:
+            self.per = 100
+        print('%.2f%%' % self.per)
 
     def start_printing(self, file):
         img = file
