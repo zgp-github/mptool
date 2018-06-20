@@ -51,6 +51,7 @@ class PCBAFTS(QDialog):
         self.net = network()
         self.read_po_config()
         self.gets_fts_data()
+        self.update_info_show()
 
     def onTimerOut(self):
         print("-------------------timer test (tieout=5000)...-------------")
@@ -291,7 +292,7 @@ class PCBAFTS(QDialog):
             info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
             self.po_info.setText(info)
 
-            msg = self.net.get_po_info(pokey, countrycode, hwversion)
+            msg = self.net.get_po_info()
             text = json.loads(msg)
             msg_type = text['messages'][0]['type']
             if msg_type == "fail":
@@ -326,6 +327,7 @@ class PCBAFTS(QDialog):
         elif msg_type == "ok":
             if msg == "add mac succes":
                 self.info_show.setText("添加MAC:"+mac+" 完成")
+                self.update_info_show()
         else:
             print("upload mac error!!!")
             self.info_show.setText("添加MAC错误,请检查")
@@ -342,3 +344,10 @@ class PCBAFTS(QDialog):
             |^([0-9A-F]{1,2}){7}([0-9A-F]{1,2})$) 
             ''', re.VERBOSE | re.IGNORECASE)
         return valid.match(addr) is not None
+
+    def update_info_show(self):
+        tmp = self.net.get_current_mac_num()
+        text = json.loads(tmp)
+        total = text['result'][0]
+        t = QTableWidgetItem(str(total))
+        self.table.setItem(4, 1, t)

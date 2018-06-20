@@ -46,13 +46,24 @@ class network():
             print("Error: network upload data Exception:",e)
             return "newtwork_error"
 
-    def get_po_info(self, po, country, hw):
-        body = {"pokey": po, "countrycode": country, "hwversion": hw}
+    def get_po_info(self):
+        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion}
         try:
             tmp = str(random.randint(1, 1000))
             url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/get_po_info/"+tmp
-            response = requests.post(url, data=json.dumps(
-                body), headers=network.headers, timeout=5)
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
+            ret = response.text
+            logging.debug(ret)
+            return ret
+        except Exception as e:
+            print("gcl get po info error:", e)
+
+    def get_current_mac_num(self):
+        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion}
+        try:
+            tmp = str(random.randint(1, 1000))
+            url = "http://"+self.tn4cioip +"/tn4cio/srv/copies_NGxx/app.php/get_uploaded_mac_num/"+tmp
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
             ret = response.text
             logging.debug(ret)
             return ret
