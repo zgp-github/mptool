@@ -48,6 +48,7 @@ class PCBAFTS(QDialog):
         self.timer.timeout.connect(self.onTimerOut)
 
     def init_data(self):
+        self.net = network()
         self.read_po_config()
         self.gets_fts_data()
 
@@ -73,7 +74,7 @@ class PCBAFTS(QDialog):
         layout.addWidget(self.cmd_input, 1, 1)
         self.cmd_input.returnPressed.connect(self.handle_cmd)
 
-        self.table = QTableWidget(5, 2)
+        self.table = QTableWidget(6, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # set canot edit the table data
@@ -103,10 +104,15 @@ class PCBAFTS(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(3, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器状态")
+        newItem = QTableWidgetItem("订单总数")
         self.table.setItem(4, 0, newItem)
-        newItem = QTableWidgetItem("None")
+        newItem = QTableWidgetItem("0")
         self.table.setItem(4, 1, newItem)
+
+        newItem = QTableWidgetItem("当前数量")
+        self.table.setItem(5, 0, newItem)
+        newItem = QTableWidgetItem("0")
+        self.table.setItem(5, 1, newItem)
 
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
@@ -197,7 +203,7 @@ class PCBAFTS(QDialog):
 
     def get_FTS_data(self):
         self._signal_update.connect(self.update_ui_and_upload_data)
-        net = network()
+        self.net = network()
         data = database().get_Tests_data()
         print("get fts data in FTS station: ", data)
 
@@ -213,7 +219,7 @@ class PCBAFTS(QDialog):
         dataList.append(sensor_type)
 
         FTSresult = "success"
-        upload_result = net.upload_mac_and_fts(sensor_mac, FTSresult)
+        upload_result = self.net.upload_mac_and_fts(sensor_mac, FTSresult)
         dataList.append(upload_result)
 
         print("upload result:", upload_result)
@@ -234,7 +240,7 @@ class PCBAFTS(QDialog):
                 dataList.append(mac)
                 dataList.append(type)
                 FTSresult = "success"
-                upload_result = net.upload_mac_and_fts(mac, FTSresult)
+                upload_result = self.net.upload_mac_and_fts(mac, FTSresult)
                 dataList.append(upload_result)
                 print("get new data upload result:", upload_result)
                 self._signal_update.emit(dataList)
@@ -293,11 +299,21 @@ class PCBAFTS(QDialog):
         conf = configparser.ConfigParser()
         if os.path.exists(config):
             conf.read(config)
-            self.pokey = conf.get('PoInfo', 'pokey')
-            self.countrycode = conf.get('PoInfo', 'countrycode')
-            self.hwversion = conf.get('PoInfo', 'hwversion')
-            info = "订单信息:"+self.pokey+"-"+self.countrycode+"-"+self.hwversion
+            pokey = conf.get('PoInfo', 'pokey')
+            countrycode = conf.get('PoInfo', 'countrycode')
+            hwversion = conf.get('PoInfo', 'hwversion')
+            info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
             self.po_info.setText(info)
+
+            msg = self.net.get_po_info(pokey, countrycode, hwversion)
+            text = json.loads(msg)
+            msg_type = text['messages'][0]['type']
+            if msg_type == "fail":
+                self.gcl_info_show.setText("错误:当前的订单不存在，请检查您的设置信息")
+            else:
+                total = text['result'][0]
+                t = QTableWidgetItem(str(total))
+                self.table.setItem(4, 1, t)
 
     def handle_cmd(self):
         cmd = self.cmd_input.text()
@@ -313,9 +329,8 @@ class PCBAFTS(QDialog):
             self.info_show.setText("无效的MAC地址:"+mac)
             return
 
-        net = network()
         val = "pass"
-        tmp = net.upload_mac_and_fts(mac, val)
+        tmp = self.net.upload_mac_and_fts(mac, val)
         text = json.loads(tmp)
         msg_type = text['messages'][0]['type']
         msg = text['messages'][0]['message']

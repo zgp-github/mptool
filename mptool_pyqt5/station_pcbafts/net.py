@@ -6,6 +6,7 @@ import requests
 import json
 import configparser
 import random
+import logging
 
 class network():
     url = 'http://192.168.10.150/tn4cio/srv/copies_NGxx/app.php/update_NGxx_mac_to_database/1234'
@@ -44,3 +45,16 @@ class network():
         except Exception as e:
             print("Error: network upload data Exception:",e)
             return "newtwork_error"
+
+    def get_po_info(self, po, country, hw):
+        body = {"pokey": po, "countrycode": country, "hwversion": hw}
+        try:
+            tmp = str(random.randint(1, 1000))
+            url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/get_po_info/"+tmp
+            response = requests.post(url, data=json.dumps(
+                body), headers=network.headers, timeout=5)
+            ret = response.text
+            logging.debug(ret)
+            return ret
+        except Exception as e:
+            print("gcl get po info error:", e)
