@@ -14,6 +14,9 @@ from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
 from time import *
+import json
+import configparser
+import os
 from station_pcbafts.fts_data import database
 from station_pcbafts.net import network
 
@@ -24,6 +27,7 @@ class PCBAFTS(QDialog):
     def __init__(self):
         super(PCBAFTS, self).__init__()
         self.initUI()
+        self.init_data()
 
     def initUI(self):
         self.create_cmd_input()
@@ -35,13 +39,17 @@ class PCBAFTS(QDialog):
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(self.QGroupBox_info_show)
         self.setLayout(mainLayout)
-        self.gets_fts_data()
 
         # It is a timer test code
         self.timer = QTimer()
         self.timer.setInterval(5000)
         self.timer.start()
         self.timer.timeout.connect(self.onTimerOut)
+
+    def init_data(self):
+        self.read_po_config()
+        self.gets_fts_data()
+
     def onTimerOut(self):
         print("-------------------timer test (tieout=5000)...-------------")
         self.timer.stop()
@@ -53,9 +61,9 @@ class PCBAFTS(QDialog):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
 
-        self.msg_show = QLabel("订单信息:")
-        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
-        layout.addWidget(self.msg_show, 0, 1)
+        self.po_info = QLabel("订单信息:")
+        self.po_info.setFont(QFont("Microsoft YaHei", 20))
+        layout.addWidget(self.po_info, 0, 1)
 
         self.cmd_input = QLineEdit(self)
         self.cmd_input.setFont(QFont("Microsoft YaHei", 25))
@@ -277,3 +285,14 @@ class PCBAFTS(QDialog):
         cursor = self.bigEditor.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.bigEditor.setTextCursor(cursor)
+
+    def read_po_config(self):
+        config = 'config.ini'
+        conf = configparser.ConfigParser()
+        if os.path.exists(config):
+            conf.read(config)
+            pokey = conf.get('PoInfo', 'pokey')
+            countrycode = conf.get('PoInfo', 'countrycode')
+            hwversion = conf.get('PoInfo', 'hwversion')
+            info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
+            self.po_info.setText(info)
