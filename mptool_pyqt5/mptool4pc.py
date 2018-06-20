@@ -94,6 +94,10 @@ class Main_Page(QTabWidget):
             conf.set("Printer", "ml1_printer", "POSTEK G-3106_ml1")
             conf.set("Printer", "pl2_printer", "POSTEK G-3106_pl2")
             conf.set("Printer", "gcl_printer", "printer_gcl_name")
+            conf.add_section("PoInfo")
+            conf.set("PoInfo", "pokey", "185005")
+            conf.set("PoInfo", "countrycode", "100")
+            conf.set("PoInfo", "hwversion", "NG01.10.AA")
             conf.write(open(config, "w"))
 
         conf.read(config)

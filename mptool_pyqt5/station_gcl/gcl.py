@@ -13,6 +13,8 @@ from threading import Timer
 from time import *
 import re
 import json
+import configparser
+import os
 from station_gcl.net import network
 
 class GCL(QDialog):
@@ -34,14 +36,15 @@ class GCL(QDialog):
         self.net = network()
         self.GCLID_STATUS = None
         self.gcl_array = []
+        self.read_po_config()
 
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
 
-        self.msg_show = QLabel("订单信息:")
-        self.msg_show.setFont(QFont("Microsoft YaHei", 20))
-        layout.addWidget(self.msg_show, 0, 1)
+        self.po_info = QLabel("订单信息:")
+        self.po_info.setFont(QFont("Microsoft YaHei", 20))
+        layout.addWidget(self.po_info, 0, 1)
 
         self.cmd_input = QLineEdit(self)
         self.cmd_input.setFont(QFont("Microsoft YaHei", 25))
@@ -164,5 +167,13 @@ class GCL(QDialog):
             ''', re.VERBOSE | re.IGNORECASE)
         return valid.match(addr) is not None
 
-
-
+    def read_po_config(self):
+        config = 'config.ini'
+        conf = configparser.ConfigParser()
+        if os.path.exists(config):
+            conf.read(config)
+            pokey = conf.get('PoInfo', 'pokey')
+            countrycode = conf.get('PoInfo', 'countrycode')
+            hwversion = conf.get('PoInfo', 'hwversion')
+            info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
+            self.po_info.setText(info)
