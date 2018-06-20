@@ -44,7 +44,7 @@ class database():
         c = conn.cursor()
         cursor = c.execute(cmd)
         for row in cursor:
-            print("row:", row)
+            # print("row:", row)
             data = []
             if row[0] > self.current_id :
                 self.current_id = row[0]

@@ -17,6 +17,7 @@ from time import *
 import json
 import configparser
 import os
+import re
 from station_pcbafts.fts_data import database
 from station_pcbafts.net import network
 
@@ -70,11 +71,11 @@ class PCBAFTS(QDialog):
         self.cmd_input.setStyleSheet("color:black")
         self.cmd_input.installEventFilter(self)
         layout.addWidget(self.cmd_input, 1, 1)
+        self.cmd_input.returnPressed.connect(self.handle_cmd)
 
         self.table = QTableWidget(5, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
         # set canot edit the table data
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
@@ -149,15 +150,16 @@ class PCBAFTS(QDialog):
         self.QGroupBox_info_show = QGroupBox("运行信息")
         layout = QFormLayout()
         print("info show for the process logs")
-        self.bigEditor = QTextEdit()
-        self.bigEditor.setPlainText("请扫描配对命令码")
-        self.bigEditor.setFont(QFont("Microsoft YaHei", 10))
-        cursor = self.bigEditor.textCursor()
+        self.info_show = QTextEdit()
+        self.info_show.setPlainText("请扫描配对命令码")
+        self.info_show.setFont(QFont("Microsoft YaHei", 15))
+        cursor = self.info_show.textCursor()
         cursor.movePosition(QTextCursor.End)
-        self.bigEditor.setTextCursor(cursor)
+        self.info_show.setTextCursor(cursor)
 
-        layout.addRow(self.bigEditor)
+        layout.addRow(self.info_show)
         self.QGroupBox_info_show.setLayout(layout)
+        self.info_show.setReadOnly(True)
 
     def update_msg_show(self, id=None):
         if id == 1:
@@ -183,7 +185,7 @@ class PCBAFTS(QDialog):
                 if event.key() == QtCore.Qt.Key_Return:
                     msg = self.cmd_input.text()
                     print("get: "+msg)
-                    self.bigEditor.append(msg)
+                    self.info_show.append(msg)
             else:
                 pass
         return False
@@ -211,7 +213,7 @@ class PCBAFTS(QDialog):
         dataList.append(sensor_type)
 
         FTSresult = "success"
-        upload_result = net.upload_data(sensor_mac, FTSresult)
+        upload_result = net.upload_mac_and_fts(sensor_mac, FTSresult)
         dataList.append(upload_result)
 
         print("upload result:", upload_result)
@@ -232,7 +234,7 @@ class PCBAFTS(QDialog):
                 dataList.append(mac)
                 dataList.append(type)
                 FTSresult = "success"
-                upload_result = net.upload_data(mac, FTSresult)
+                upload_result = net.upload_mac_and_fts(mac, FTSresult)
                 dataList.append(upload_result)
                 print("get new data upload result:", upload_result)
                 self._signal_update.emit(dataList)
@@ -263,7 +265,7 @@ class PCBAFTS(QDialog):
 
         for val in list:
             print(val)
-            self.bigEditor.append(str(val))
+            self.info_show.append(str(val))
             logging.debug(str(val))
 
         upload_status = list[4]
@@ -282,17 +284,60 @@ class PCBAFTS(QDialog):
         #     self.update_test_resule_show()
         # self.count = self.count + 1
 
-        cursor = self.bigEditor.textCursor()
+        cursor = self.info_show.textCursor()
         cursor.movePosition(QTextCursor.End)
-        self.bigEditor.setTextCursor(cursor)
+        self.info_show.setTextCursor(cursor)
 
     def read_po_config(self):
         config = 'config.ini'
         conf = configparser.ConfigParser()
         if os.path.exists(config):
             conf.read(config)
-            pokey = conf.get('PoInfo', 'pokey')
-            countrycode = conf.get('PoInfo', 'countrycode')
-            hwversion = conf.get('PoInfo', 'hwversion')
-            info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
+            self.pokey = conf.get('PoInfo', 'pokey')
+            self.countrycode = conf.get('PoInfo', 'countrycode')
+            self.hwversion = conf.get('PoInfo', 'hwversion')
+            info = "订单信息:"+self.pokey+"-"+self.countrycode+"-"+self.hwversion
             self.po_info.setText(info)
+
+    def handle_cmd(self):
+        cmd = self.cmd_input.text()
+        print("get cmd:"+cmd)
+        self.cmd_input.clear()
+        self.update_mac_for_test(cmd)
+    
+    def update_mac_for_test(self, macaddress):
+        mac = macaddress
+        print("get mac:", mac)
+        check = self.mac_check(mac)
+        if check == False:
+            self.info_show.setText("无效的MAC地址:"+mac)
+            return
+
+        net = network()
+        val = "pass"
+        tmp = net.upload_mac_and_fts(mac, val)
+        text = json.loads(tmp)
+        msg_type = text['messages'][0]['type']
+        msg = text['messages'][0]['message']
+        if msg_type == "fail":
+            if msg == "already exist in the database":
+                self.info_show.setText("MAC:"+mac+" 已经存在数据库中")
+        elif msg_type == "ok":
+            if msg == "add mac succes":
+                self.info_show.setText("添加MAC:"+mac+" 完成")
+        else:
+            print("upload mac error!!!")
+            self.info_show.setText("添加MAC错误,请检查")
+
+    def mac_check(self, addr):
+        valid = re.compile(r''' 
+            (^([0-9A-F]{1,2}[-]){5}([0-9A-F]{1,2})$ 
+            |^([0-9A-F]{1,2}[:]){5}([0-9A-F]{1,2})$ 
+            |^([0-9A-F]{1,2}[.]){5}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}){5}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[-]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[:]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}[.]){7}([0-9A-F]{1,2})$
+            |^([0-9A-F]{1,2}){7}([0-9A-F]{1,2})$) 
+            ''', re.VERBOSE | re.IGNORECASE)
+        return valid.match(addr) is not None
