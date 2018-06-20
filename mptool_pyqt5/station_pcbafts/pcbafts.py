@@ -74,7 +74,7 @@ class PCBAFTS(QDialog):
         layout.addWidget(self.cmd_input, 1, 1)
         self.cmd_input.returnPressed.connect(self.handle_cmd)
 
-        self.table = QTableWidget(6, 2)
+        self.table = QTableWidget(5, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # set canot edit the table data
@@ -99,20 +99,15 @@ class PCBAFTS(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(2, 1, newItem)
 
-        newItem = QTableWidgetItem("传感器类型")
+        newItem = QTableWidgetItem("订单总数")
         self.table.setItem(3, 0, newItem)
-        newItem = QTableWidgetItem("None")
+        newItem = QTableWidgetItem("0")
         self.table.setItem(3, 1, newItem)
 
-        newItem = QTableWidgetItem("订单总数")
+        newItem = QTableWidgetItem("当前数量")
         self.table.setItem(4, 0, newItem)
         newItem = QTableWidgetItem("0")
         self.table.setItem(4, 1, newItem)
-
-        newItem = QTableWidgetItem("当前数量")
-        self.table.setItem(5, 0, newItem)
-        newItem = QTableWidgetItem("0")
-        self.table.setItem(5, 1, newItem)
 
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
@@ -210,13 +205,11 @@ class PCBAFTS(QDialog):
         sensor_id = data[0]
         sensor_time = data[1]
         sensor_mac = data[2]
-        sensor_type = "door_window_sensor"
 
         dataList = []
         dataList.append(sensor_id)
         dataList.append(sensor_time)
         dataList.append(sensor_mac)
-        dataList.append(sensor_type)
 
         FTSresult = "success"
         upload_result = self.net.upload_mac_and_fts(sensor_mac, FTSresult)
@@ -231,14 +224,12 @@ class PCBAFTS(QDialog):
             id = data[0]
             time = data[1]
             mac = data[2]
-            type = "door_window_sensor"
 
             if id != sensor_id and mac != sensor_mac:
                 dataList = []
                 dataList.append(id)
                 dataList.append(time)
                 dataList.append(mac)
-                dataList.append(type)
                 FTSresult = "success"
                 upload_result = self.net.upload_mac_and_fts(mac, FTSresult)
                 dataList.append(upload_result)
@@ -264,17 +255,12 @@ class PCBAFTS(QDialog):
         newItem = QTableWidgetItem(mac)
         self.table.setItem(2, 1, newItem)
 
-        # sensor type
-        sensor_type = list[3]
-        newItem = QTableWidgetItem(sensor_type)
-        self.table.setItem(3, 1, newItem)
-
         for val in list:
             print(val)
             self.info_show.append(str(val))
             logging.debug(str(val))
 
-        upload_status = list[4]
+        upload_status = list[3]
         if upload_status == "newtwork_error":
             self.update_test_resule_show("fail")
             msg = "网络错误,请检查您的网络连接和TN4C.IO IP地址"
@@ -313,7 +299,7 @@ class PCBAFTS(QDialog):
             else:
                 total = text['result'][0]
                 t = QTableWidgetItem(str(total))
-                self.table.setItem(4, 1, t)
+                self.table.setItem(3, 1, t)
 
     def handle_cmd(self):
         cmd = self.cmd_input.text()
