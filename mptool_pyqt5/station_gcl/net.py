@@ -21,17 +21,30 @@ class network():
         conf = configparser.ConfigParser()
         if os.path.exists(config):
             conf.read(config)
-            ip = conf.get('TN4CIO', 'TN4CIOIP')
-        tmp = str(random.randint(1, 1000))
-        self.url = "http://"+ip+"/tn4cio/srv/copies_NGxx/app.php/check_mac_valid/"+tmp
+            self.tn4cioip = conf.get('TN4CIO', 'TN4CIOIP')
 
     def check_mac_valid(self, mac):
         body = {"macaddress": mac}
         try:
-            response = requests.post(self.url, data=json.dumps(body), headers=network.headers, timeout=5)
+            tmp = str(random.randint(1, 1000))
+            url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/check_mac_valid/"+tmp
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
             ret = response.text
             print("check mac for gcl:", ret)
             logging.debug(ret)
             return ret
         except Exception as e:
-            print("gcl error:", e)
+            print("gcl check mac error:", e)
+
+    def get_po_info(self, po, country, hw):
+        body = {"pokey": po, "countrycode": country, "hwversion": hw}
+        try:
+            tmp = str(random.randint(1, 1000))
+            url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/get_po_info/"+tmp
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
+            ret = response.text
+            print("check gcl:", ret)
+            logging.debug(ret)
+            return ret
+        except Exception as e:
+            print("gcl get po info error:", e)

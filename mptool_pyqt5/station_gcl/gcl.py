@@ -53,7 +53,7 @@ class GCL(QDialog):
         layout.addWidget(self.cmd_input, 1, 1)
         self.cmd_input.returnPressed.connect(self.handle_cmd)
 
-        self.table = QTableWidget(3, 2)
+        self.table = QTableWidget(5, 2)
         # auto adapt the width
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -74,10 +74,20 @@ class GCL(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 1, newItem)
 
-        newItem = QTableWidgetItem("入箱数量")
+        newItem = QTableWidgetItem("订单总数")
         self.table.setItem(2, 0, newItem)
         newItem = QTableWidgetItem("0")
         self.table.setItem(2, 1, newItem)
+
+        newItem = QTableWidgetItem("每箱数量")
+        self.table.setItem(3, 0, newItem)
+        newItem = QTableWidgetItem("0")
+        self.table.setItem(3, 1, newItem)
+
+        newItem = QTableWidgetItem("入箱数量")
+        self.table.setItem(4, 0, newItem)
+        newItem = QTableWidgetItem("0")
+        self.table.setItem(4, 1, newItem)
 
         layout.addWidget(self.table, 0, 2, 4, 1)
         layout.setColumnStretch(1, 70)
@@ -137,7 +147,7 @@ class GCL(QDialog):
                     self.gcl_array.append(mac)
                     count = len(self.gcl_array)
                     tmp = QTableWidgetItem(str(count))
-                    self.table.setItem(2, 1, tmp)
+                    self.table.setItem(4, 1, tmp)
                     self.gcl_info_show.setText("MAC地址:"+mac)
             else:
                 pass
@@ -177,3 +187,8 @@ class GCL(QDialog):
             hwversion = conf.get('PoInfo', 'hwversion')
             info = "订单信息:"+pokey+"-"+countrycode+"-"+hwversion
             self.po_info.setText(info)
+            count_per_carton = conf.get('GclInfo', 'count_one_package')
+            num = QTableWidgetItem(str(count_per_carton))
+            self.table.setItem(3, 1, num)
+            
+
