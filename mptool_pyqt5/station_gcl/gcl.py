@@ -151,7 +151,6 @@ class GCL(QDialog):
         print("gcl_end")
         self.GCLID_STATUS = None
         self.gcl_info_show.setText("入箱结束,正在生成GCL图片,请稍等...")
-        
         t = threading.Thread(target=self.create_label)
         t.start()
 

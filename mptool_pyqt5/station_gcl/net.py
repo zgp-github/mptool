@@ -68,3 +68,20 @@ class network():
             return ret
         except Exception as e:
             print("gcl get po info error:", e)
+
+    def request_gcl_download_url(self, gcl_name):
+        name = gcl_name
+        print("request_gcl_download_url gcl name:", name)
+
+        tmp = str(random.randint(1, 1000))
+        url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/get_download_url_by_gclname/"+tmp
+        body = {"pokey": self.pokey, "gclname": name}
+        try:
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
+            ret = response.text
+            print("request ml1 label response:", ret)
+            logging.debug(ret)
+            return ret
+        except Exception as e:
+            print("gcl Exception:", e)
+            return "newtwork_error"
