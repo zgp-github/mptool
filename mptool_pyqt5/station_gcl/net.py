@@ -56,3 +56,14 @@ class network():
     def create_gcl_label(self, macaddress_list):
         mac_list = macaddress_list
         print("create_gcl_label mac list:", mac_list)
+        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion, "maclist": mac_list}
+        try:
+            tmp = str(random.randint(1, 1000))
+            url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/create_gcl_label/"+tmp
+            response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
+            ret = response.text
+            print("check gcl:", ret)
+            logging.debug(ret)
+            return ret
+        except Exception as e:
+            print("gcl get po info error:", e)

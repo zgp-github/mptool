@@ -108,11 +108,10 @@ class GCL(QDialog):
             self.GCLID_STATUS = "START"
             self.gcl_info_show.setText("启动入箱,请扫描需要入箱的传感器MAC地址")
         elif cmd == "GCLID_END":
-            pass
-        elif self.GCLID_STATUS == "START":
-            self.gcl_start(cmd)
-        elif self.GCLID_STATUS == "END":
+            self.GCLID_STATUS = "END"
             self.gcl_end()
+        elif self.GCLID_STATUS == "START":
+            self.gcl_start(cmd)            
         else:
             print("cmd:"+cmd+" not support")
             self.gcl_info_show.setText("命令:"+cmd+" 不支持!")
@@ -133,7 +132,6 @@ class GCL(QDialog):
                     self.gcl_info_show.setText("错误MAC:"+mac+" 不在数据库中")
                 else:
                     self.gcl_array.append(mac)
-                    print(self.gcl_array)
                     count = len(self.gcl_array)
                     tmp = QTableWidgetItem(str(count))
                     self.table.setItem(2, 1, tmp)
@@ -144,6 +142,7 @@ class GCL(QDialog):
     def gcl_end(self):
         print("gcl_end")
         self.GCLID_STATUS = None
+        self.net.create_gcl_label(self.gcl_array)
 
     def mac_in_gcl_array(self, mac):
         if mac in self.gcl_array:
