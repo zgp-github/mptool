@@ -79,7 +79,8 @@ class network():
         try:
             response = requests.post(url, data=json.dumps(body), headers=network.headers, timeout=5)
             ret = response.text
-            print("request ml1 label response:", ret)
+            print("gcl url:", ret)
+            logging.debug("request_gcl_download_url:")
             logging.debug(ret)
             return ret
         except Exception as e:

@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
 from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtGui import QFont, QTextCursor
+from PyQt5.QtGui import QFont, QTextCursor, QImage
 from PyQt5.QtCore import QEvent, QTimer
 import threading
 from threading import Timer
@@ -15,6 +15,7 @@ import re
 import json
 import configparser
 import os
+from urllib.request import urlretrieve, urlcleanup, urlopen
 from station_gcl.net import network
 
 class GCL(QDialog):
@@ -176,16 +177,50 @@ class GCL(QDialog):
                         gcl_file_name = i+"\n"
                     else:
                         gcl_file_name = gcl_file_name + i+"\n"
-                info = gcl_file_name+"创建完成,请等待打印..."
-                self.gcl_info_show.setText(info)
+                    self.download_gcl_file(i)
+                # info = gcl_file_name+"创建完成,请等待打印..."
+                # self.gcl_info_show.setText(info)
         elif msg_type == "fail":
             pass
         else:
             info = "创建GCL文件错误!!!"
             self.gcl_info_show.setText(info)
-
         self.gcl_array.clear()
         self.update_info_show()
+
+    def download_gcl_file(self, name):
+        file_name = name
+        tmp = self.net.request_gcl_download_url(file_name)
+        text = json.loads(tmp)
+        msg_type = text['messages'][0]['type']
+        msg = text['messages'][0]['message']
+        if msg_type == "ok":
+            url = text['result'][0]
+            try:
+                # download the gcl file
+                gcl = os.path.join(os.getcwd(), file_name)
+                urlretrieve(url, gcl, self.download_callback)
+                print("download_success:" + gcl)
+                if self.percent == 100:
+                    sleep(0.1)
+                    self.per = 0
+                    preview = QImage(gcl, 'PNG')
+                    cursor = QTextCursor(self.gcl_info_show.document())
+                    cursor.insertText("打印GCL成功\n")
+                    cursor.insertImage(preview)
+            except Exception as e:
+                print("dowmload error:", e)
+            finally:
+                urlcleanup()
+        elif msg_type == "fail":
+            #fixme
+            pass
+
+    def download_callback(self, a, b, c):
+        self.percent = 100.0*a*b/c
+        if self.percent > 100:
+            self.percent = 100
+        print('%.2f%%' % self.percent)
 
     def mac_in_gcl_array(self, mac):
         if mac in self.gcl_array:
