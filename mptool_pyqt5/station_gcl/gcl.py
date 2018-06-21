@@ -18,6 +18,8 @@ import os
 from station_gcl.net import network
 
 class GCL(QDialog):
+    _signal = QtCore.pyqtSignal(object)
+
     def __init__(self, parent=None):
         super(GCL, self).__init__(parent)
         self.initUI()
@@ -37,6 +39,8 @@ class GCL(QDialog):
         self.GCLID_STATUS = None
         self.gcl_array = []
         self.read_po_config()
+
+        self._signal.connect(self.update_ui_data)
 
     def create_cmd_input(self):
         self.gridGroupBox = QGroupBox("命令输入区")
@@ -107,11 +111,12 @@ class GCL(QDialog):
         if cmd == "GCLID_START":
             self.GCLID_STATUS = "START"
             self.gcl_info_show.setText("启动入箱,请扫描需要入箱的传感器MAC地址")
+            self.gcl_array.clear()
         elif cmd == "GCLID_END":
             self.GCLID_STATUS = "END"
             self.gcl_end()
         elif self.GCLID_STATUS == "START":
-            self.gcl_start(cmd)            
+            self.gcl_start(cmd)
         else:
             print("cmd:"+cmd+" not support")
             self.gcl_info_show.setText("命令:"+cmd+" 不支持!")
@@ -132,17 +137,56 @@ class GCL(QDialog):
                     self.gcl_info_show.setText("错误MAC:"+mac+" 不在数据库中")
                 else:
                     self.gcl_array.append(mac)
-                    count = len(self.gcl_array)
-                    tmp = QTableWidgetItem(str(count))
-                    self.table.setItem(2, 1, tmp)
+                    self.update_info_show()
                     self.gcl_info_show.setText("MAC地址:"+mac)
             else:
                 pass
 
+    def update_info_show(self):
+        count = len(self.gcl_array)
+        tmp = QTableWidgetItem(str(count))
+        self.table.setItem(2, 1, tmp)
+
     def gcl_end(self):
         print("gcl_end")
         self.GCLID_STATUS = None
-        self.net.create_gcl_label(self.gcl_array)
+        self.gcl_info_show.setText("入箱结束,正在生成GCL图片,请稍等...")
+        
+        t = threading.Thread(target=self.create_label)
+        t.start()
+
+    def create_label(self):
+        print("thread create_label")
+        ret = self.net.create_gcl_label(self.gcl_array)
+        data = []
+        data.append(ret)
+        self._signal.emit(ret)
+
+    def update_ui_data(self, data):
+        msg = data
+        print("signal update_ui_data:", msg)
+
+        tmp = json.loads(msg)
+        msg_type = tmp['messages'][0]['type']
+        msg = tmp['messages'][0]['message']
+        if msg_type == "ok":
+            if msg == "create the gcl label success":
+                gcl_file_name = None
+                for i in tmp['result']:
+                    if gcl_file_name == None:
+                        gcl_file_name = i+"\n"
+                    else:
+                        gcl_file_name = gcl_file_name + i+"\n"
+                info = gcl_file_name+"创建完成,请等待打印..."
+                self.gcl_info_show.setText(info)
+        elif msg_type == "fail":
+            pass
+        else:
+            info = "创建GCL文件错误!!!"
+            self.gcl_info_show.setText(info)
+
+        self.gcl_array.clear()
+        self.update_info_show()
 
     def mac_in_gcl_array(self, mac):
         if mac in self.gcl_array:
