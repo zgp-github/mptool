@@ -180,7 +180,7 @@ class GCL(QDialog):
             num = QTableWidgetItem(str(count_per_carton))
             self.table.setItem(1, 1, num)
 
-            msg = self.net.get_po_info(pokey, countrycode, hwversion)
+            msg = self.net.get_po_info()
             text = json.loads(msg)
             msg_type = text['messages'][0]['type']
             if msg_type == "fail":

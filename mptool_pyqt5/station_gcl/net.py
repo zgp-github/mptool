@@ -40,8 +40,8 @@ class network():
         except Exception as e:
             print("gcl check mac error:", e)
 
-    def get_po_info(self, po, country, hw):
-        body = {"pokey": po, "countrycode": country, "hwversion": hw}
+    def get_po_info(self):
+        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion}
         try:
             tmp = str(random.randint(1, 1000))
             url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/get_po_info/"+tmp
