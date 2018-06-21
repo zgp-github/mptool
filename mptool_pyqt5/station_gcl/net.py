@@ -26,6 +26,7 @@ class network():
             self.pokey = conf.get('PoInfo', 'pokey')
             self.countrycode = conf.get('PoInfo', 'countrycode')
             self.hwversion = conf.get('PoInfo', 'hwversion')
+            self.total_per_carton = conf.get('GclInfo', 'count_one_package')
 
     def check_mac_valid(self, mac):
         body = {"macaddress": mac}
@@ -56,7 +57,7 @@ class network():
     def create_gcl_label(self, macaddress_list):
         mac_list = macaddress_list
         print("create_gcl_label mac list:", mac_list)
-        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion, "maclist": mac_list}
+        body = {"pokey": self.pokey, "countrycode": self.countrycode, "hwversion": self.hwversion, "maclist": mac_list, "count_per_carton": self.total_per_carton}
         try:
             tmp = str(random.randint(1, 1000))
             url = "http://"+self.tn4cioip+"/tn4cio/srv/copies_NGxx/app.php/create_gcl_label/"+tmp
