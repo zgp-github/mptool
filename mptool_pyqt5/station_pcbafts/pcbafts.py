@@ -258,7 +258,6 @@ class PCBAFTS(QDialog):
 
         for val in list:
             print(val)
-            self.info_show.append(str(val))
             logging.debug(str(val))
 
         upload_status = list[3]
@@ -306,7 +305,11 @@ class PCBAFTS(QDialog):
         cmd = self.cmd_input.text()
         print("get cmd:"+cmd)
         self.cmd_input.clear()
-        self.update_mac_for_test(cmd)
+        if cmd == "CMD_PCBAFTS_START":
+            print("add functions in here")
+            pass
+        else:
+            self.update_mac_for_test(cmd)
     
     def update_mac_for_test(self, macaddress):
         mac = macaddress

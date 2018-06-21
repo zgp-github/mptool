@@ -9,7 +9,6 @@ import random
 import logging
 
 class network():
-    url = 'http://192.168.10.150/tn4cio/srv/copies_NGxx/app.php/update_NGxx_mac_to_database/1234'
     headers = {'content-type': "application/json"}
 
     def __init__(self):
