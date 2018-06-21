@@ -18,10 +18,14 @@ class network():
 
     def read_config(self):
         config = 'config.ini'
+        config_path = os.path.join(os.getcwd(), config)
         conf = configparser.ConfigParser()
-        if os.path.exists(config):
-            conf.read(config)
+        if os.path.exists(config_path):
+            conf.read(config_path)
             self.tn4cioip = conf.get('TN4CIO', 'TN4CIOIP')
+            self.pokey = conf.get('PoInfo', 'pokey')
+            self.countrycode = conf.get('PoInfo', 'countrycode')
+            self.hwversion = conf.get('PoInfo', 'hwversion')
 
     def check_mac_valid(self, mac):
         body = {"macaddress": mac}
@@ -48,3 +52,7 @@ class network():
             return ret
         except Exception as e:
             print("gcl get po info error:", e)
+
+    def create_gcl_label(self, macaddress_list):
+        mac_list = macaddress_list
+        print("create_gcl_label mac list:", mac_list)

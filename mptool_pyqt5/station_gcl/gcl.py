@@ -133,6 +133,7 @@ class GCL(QDialog):
                     self.gcl_info_show.setText("错误MAC:"+mac+" 不在数据库中")
                 else:
                     self.gcl_array.append(mac)
+                    print(self.gcl_array)
                     count = len(self.gcl_array)
                     tmp = QTableWidgetItem(str(count))
                     self.table.setItem(2, 1, tmp)
