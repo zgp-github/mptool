@@ -258,6 +258,8 @@ class GCL(QDialog):
             self.table.setItem(1, 1, num)
 
             msg = self.net.get_po_info()
+            if msg == None:
+                return
             text = json.loads(msg)
             msg_type = text['messages'][0]['type']
             if msg_type == "fail":
