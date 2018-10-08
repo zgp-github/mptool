@@ -42,16 +42,16 @@ from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import *
 
+from window_2.fts_data import Fts
+from window_2.net import network
 
-from station_pcbafts.fts_data import Fts
-from station_pcbafts.net import network
 
-class PCBAFTS(QDialog):
+class Window2(QDialog):
     _signal_check_config = QtCore.pyqtSignal(dict)
     _signal_update_ui_and_info = QtCore.pyqtSignal(dict)
 
     def __init__(self):
-        super(PCBAFTS, self).__init__()
+        super(Window2, self).__init__()
         self._signal_check_config.connect(self.check_config_and_init)
         self._signal_update_ui_and_info.connect(self.update_ui_and_info)
         self.current_id = None
