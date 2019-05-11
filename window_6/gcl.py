@@ -41,13 +41,13 @@ from PyQt5.QtWidgets import QAbstractItemView
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import *
 
-from station_gcl.net import network
-from station_gcl.gcl_printer import printer
-from station_gcl.weighter import Weighter
-from station_gcl.cartoning import Cartoning
-from station_gcl.gclid_reset_part import gclid_reset_part
-from station_gcl.gclid_reset_all import gclid_reset_all
-from station_gcl.gclid_reprint import gclid_reprint
+from window6.net import network
+from window6.gcl_printer import printer
+from window6.weighter import Weighter
+from window6.cartoning import Cartoning
+from window6.gclid_reset_part import gclid_reset_part
+from window6.gclid_reset_all import gclid_reset_all
+from window6.gclid_reprint import gclid_reprint
 
 
 class GCL(QDialog):

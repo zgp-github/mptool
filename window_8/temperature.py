@@ -11,8 +11,8 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QObject
 from PyQt5.QtCore import QTimer
 
-from station_iqa.gateway_h10 import GatewayH10
-from station_iqa.net import network
+from window8.gateway_h10 import GatewayH10
+from window8.net import network
 
 
 class Temperature(QObject):

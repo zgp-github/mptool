@@ -10,8 +10,8 @@ from time import strftime
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject
 
-from station_assemblyfunction.gateway_h10 import GatewayH10
-from station_assemblyfunction.net import network
+from window7.gateway_h10 import GatewayH10
+from window7.net import network
 
 
 class DoorWindow(QObject):
@@ -22,6 +22,7 @@ class DoorWindow(QObject):
         self.hwversion = None
         self.gateway = None
         self.corelight = None
+        self.QA_FUNCTION_TESTING = False
         self.init_data()
 
     def init_data(self):
@@ -289,11 +290,41 @@ class DoorWindow(QObject):
             ret = self.function_DoorWindow()
             if ret is True:
                 sleep(2)
-                data = {"message": "start print PL2 label", "macaddress": macaddress}
-                self._signal_doorwindow.emit(data)
+                self.qa_longtime_testing()
             else:
                 pass
         except Exception:
             pass
         finally:
             self.disable_gateway_pairing()
+
+    def qa_longtime_testing(self):
+        data = {"message": "doorwindow sensor qa longtime test starting"}
+        self._signal_doorwindow.emit(data)
+        self.QA_FUNCTION_TESTING = True
+        while self.QA_FUNCTION_TESTING == True:
+            ret = self.get_doorwindow_sensor_status()
+            try:
+                timestamp = ret['timestamp']
+                address64 = ret['address64']
+                macaddress = address64.replace('0x', '').upper()
+                deviceID = ret['deviceID']
+                vendor = ret['vendor']
+                model = ret['model']
+                status = ret['status']
+                data = {"message": "doorwindow sensor qa testing info", "timestamp": timestamp, "macaddress": macaddress,
+                        "deviceID": deviceID, "vendor": vendor, "model": model, "status": status}
+                print("---------doorwindow sensor QA:", data)
+                self._signal_doorwindow.emit(data)
+            except Exception:
+                pass
+            finally:
+                sleep(1)
+
+    def exit_qa_longtime_testing(self):
+        if self.QA_FUNCTION_TESTING:
+            self.QA_FUNCTION_TESTING = False
+            data = {"message": "exit doorwindow sensor qa testing"}
+            self._signal_doorwindow.emit(data)
+        else:
+            pass

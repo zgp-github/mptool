@@ -13,9 +13,9 @@ from urllib.request import urlcleanup
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject
 
-from station_gcl.net import network
-from station_gcl.weighter import Weighter
-from station_gcl.gcl_printer import printer
+from window6.net import network
+from window6.weighter import Weighter
+from window6.gcl_printer import printer
 
 
 class Cartoning(QObject):

@@ -43,8 +43,8 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import *
 
 
-from station_assemblyfts.fts_data import Fts
-from station_assemblyfts.net import network
+from window3.fts_data import Fts
+from window3.net import network
 
 class ASSEMBLY_FTS(QDialog):
     _signal_check_config = QtCore.pyqtSignal(dict)

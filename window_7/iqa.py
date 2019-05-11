@@ -49,22 +49,21 @@ from PyQt5.QtWidgets import QAbstractItemView
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import *
 
-from station_assemblyfunction.net import network
-from station_assemblyfunction.pl2_printer import Printer
-from station_assemblyfunction.sensor_type import sensor_type
-from station_assemblyfunction.gateway_h10 import GatewayH10
-from station_assemblyfunction.doorwindow import DoorWindow
-from station_assemblyfunction.waterleakage import WaterLeakage
-from station_assemblyfunction.temperature import Temperature
-from station_assemblyfunction.motiondetector import MotionDetectot
+from window7.net import network
+from window7.sensor_type import sensor_type
+from window7.gateway_h10 import GatewayH10
+from window7.doorwindow import DoorWindow
+from window7.waterleakage import WaterLeakage
+from window7.temperature import Temperature
+from window7.motiondetector import MotionDetectot
 
 
-class AssemblyFunction(QDialog):
+class NGSTB_IQA(QDialog):
     _signal_check_config = QtCore.pyqtSignal(dict)
     _signal_update_ui_and_info = QtCore.pyqtSignal(dict)
 
     def __init__(self, parent=None):
-        super(AssemblyFunction, self).__init__(parent)
+        super(NGSTB_IQA, self).__init__(parent)
         self._signal_check_config.connect(self.check_config_and_init)
         self._signal_update_ui_and_info.connect(self.update_ui_and_info_show)
         self.timer = None
@@ -104,17 +103,16 @@ class AssemblyFunction(QDialog):
         mainLayout.addWidget(self.QGridLayout_po_progress)
 
         mainLayout.setStretchFactor(self.gridGroupBox, 25)
-        mainLayout.setStretchFactor(self.formGroupBox_test_status, 10)
-        mainLayout.setStretchFactor(self.QGroupBox_info_show, 60)
+        mainLayout.setStretchFactor(self.formGroupBox_test_status, 5)
+        mainLayout.setStretchFactor(self.QGroupBox_info_show, 65)
         mainLayout.setStretchFactor(self.QGridLayout_po_progress, 5)
+
         self.setLayout(mainLayout)
 
     def init_data(self):
         self.parser_config()
         self.net = network()
         self.gateway_h10 = GatewayH10()
-        self.printer = Printer()
-        self.printer._signal_printer.connect(self.update_ui_and_info_show)
         self.RUNNING_MODE = None
         self.check_configuration()
 
@@ -122,7 +120,7 @@ class AssemblyFunction(QDialog):
         self.gridGroupBox = QGroupBox("命令输入区")
         layout = QGridLayout()
 
-        station_info = QLabel("工站: 整机功能测试")
+        station_info = QLabel("工站: NGSTB IQA")
         station_info.setFont(QFont("Microsoft YaHei", 20))
         layout.addWidget(station_info, 0, 0)
         station_info.setAlignment(QtCore.Qt.AlignCenter)
@@ -160,17 +158,12 @@ class AssemblyFunction(QDialog):
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 1, newItem)
 
-        newItem = QTableWidgetItem("打印机设置")
-        self.table.setItem(2, 0, newItem)
-        newItem = QTableWidgetItem("None")
-        self.table.setItem(2, 1, newItem)
-
         newItem = QTableWidgetItem("订单总数")
         self.table.setItem(0, 2, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(0, 3, newItem)
 
-        newItem = QTableWidgetItem("已测试")
+        newItem = QTableWidgetItem("IQA已测试")
         self.table.setItem(1, 2, newItem)
         newItem = QTableWidgetItem("None")
         self.table.setItem(1, 3, newItem)
@@ -195,7 +188,7 @@ class AssemblyFunction(QDialog):
             '''color: black; background-color: gray''')
         info = '测试状态'
         self.test_result.setText(info)
-        self.test_result.setFont(QFont("Microsoft YaHei", 30))
+        self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
         layout.addRow(self.test_result)
         self.formGroupBox_test_status.setLayout(layout)
@@ -254,7 +247,7 @@ class AssemblyFunction(QDialog):
         self.QGroupBox_info_show.setLayout(layout)
 
     def create_po_progressbar_show(self):
-        self.QGridLayout_po_progress = QGroupBox("订单进度")
+        self.QGridLayout_po_progress = QGroupBox("IQA测试率(测试/总数)")
         layout = QGridLayout()
         self.progressbar = QProgressBar(self)
         layout.addWidget(self.progressbar, 1, 0)
@@ -273,7 +266,6 @@ class AssemblyFunction(QDialog):
             self.pokey = conf.get('PoInfo', 'pokey')
             self.countrycode = conf.get('PoInfo', 'countrycode')
             self.hwversion = conf.get('PoInfo', 'hwversion')
-            self.pl2_printer_name = conf.get('Printer', 'pl2_printer')
             self.TempRefRange = conf.get('TemperatureRef', 'range')
             self.useRefdefaultvaule = conf.get('TemperatureRef', 'usedefaultvalue')
             self.Refdefaultvaule = conf.get('TemperatureRef', 'defaultvalue')
@@ -351,23 +343,6 @@ class AssemblyFunction(QDialog):
             self._signal_check_config.emit(data)
         sleep(0.1)
 
-        # 4.check the pl2 printer
-        msg = "checking printer"
-        data = {"message": msg}
-        self._signal_check_config.emit(data)
-        sleep(0.1)
-        printer_list = self.printer.list()
-        if self.pl2_printer_name in printer_list:
-            msg = "check printer success"
-            data = {"message": msg}
-            self._signal_check_config.emit(data)
-        else:
-            msg = "check printer fail"
-            data = {"message": msg}
-            self._signal_check_config.emit(data)
-            return
-
-        sleep(0.1)
         # clean up the H10 gateway when start
         msg = "init gateway"
         data = {"message": msg}
@@ -409,6 +384,7 @@ class AssemblyFunction(QDialog):
 
         self.show_po_info()
         self.show_qr_cmd_pair_start()
+        print("---- check_config_and_init msg:", msg)
         if msg == "checking configuration":
             self.info_show.setText("正在检查您的配置信息，请稍等...")
         elif msg == "checking corelight":
@@ -455,25 +431,6 @@ class AssemblyFunction(QDialog):
             self.info_show.append("2.确认网关的IP地址，并且设置到config.ini配置文件中的Gateway_H10项并保存")
             self.info_show.append("3.检查网关网络是否正常")
             self.info_show.append("4.重新启动本程序")
-        elif msg == "checking printer":
-            self.info_show.append("\n检查打印机: "+self.pl2_printer_name)
-        elif msg == "check printer success":
-            self.info_show.append("通过")
-            self.show_printer_name()
-        elif msg == "check printer fail":
-            self.info_show.append("错误:")
-            self.info_show.append("1.PL2打印机设置错误,请检查确认...")
-            self.info_show.append("2.当前打印机设置: " + self.pl2_printer_name)
-            self.info_show.append("\n提示:")
-            self.info_show.append("1.请使用USB线连接打印机到本电脑")
-            self.info_show.append("2.打开Windows控制面板,找到您的打印机名称")
-            self.info_show.append("3.找到程序的配置文件config.ini")
-            self.info_show.append("4.设置您的打印机到配置文件中的pl2_printer项并保存")
-            self.info_show.append("5.重新启动本程序")
-            self.info_show.append("\n当前系统打印机列表:")
-            printer_list = self.printer.list()
-            for item in printer_list:
-                self.info_show.append(str(item))
         elif msg == "init gateway":
             self.info_show.append("\n正在初始化网关")
         elif msg == "check reference TemperatureSensor success":
@@ -492,7 +449,6 @@ class AssemblyFunction(QDialog):
         self.update_status_show("init")
         self.show_tn4cio_ip()
         self.show_gatewayH10_ip()
-        self.show_printer_name()
         self.show_po_info()
         self.show_po_total()
         self.show_produced_sensor_number_and_progress()
@@ -514,27 +470,20 @@ class AssemblyFunction(QDialog):
             self.testing_thread_start()
         elif cmd == "CMD_COMFIRM_FUNCTION_TEST_FAIL":
             self.confirm_function_test_fail()
-        elif cmd == "REPRINT_PL2":
-            self.RUNNING_MODE = "REPRINT_PL2"
-            self.info_show.setText("重打印PL2标签模式")
-            self.info_show.append("请扫描需要重打印PL2的感应器MAC地址")
         elif cmd == "CMD_PAIRING_REF_SNESOR_START":
             temperature_sensor = Temperature()
             temperature_sensor._signal_temperature.connect(self.update_ui_and_info_show)
             t = threading.Thread(target=temperature_sensor.pairing_reference_temperature_sensor)
             t.start()
+        elif cmd == "CMD_EXIT_QA_TEST":
+            self.exit_qa_testing()
         else:
-            if self.RUNNING_MODE == "REPRINT_PL2":
-                self.RUNNING_MODE = None
-                mac = cmd
-                self.printer.print_pl2_label(mac)
-            else:
-                self.info_show.setText("错误提示:")
-                self.info_show.append("命令码: "+cmd+" 不支持,请根据作业指导书进行操作!")
-                self.timer = QTimer()
-                self.timer.setInterval(1000)
-                self.timer.start()
-                self.timer.timeout.connect(self.onTimerOut)
+            self.info_show.setText("错误提示:")
+            self.info_show.append("命令码: "+cmd+" 不支持,请根据作业指导书进行操作!")
+            self.timer = QTimer()
+            self.timer.setInterval(1000)
+            self.timer.start()
+            self.timer.timeout.connect(self.onTimerOut)
 
     def onTimerOut(self):
         self.timer.stop()
@@ -563,20 +512,16 @@ class AssemblyFunction(QDialog):
             self.test_result.setStyleSheet(
                 '''color: black; background-color: gray''')
         self.test_result.setText(info)
-        self.test_result.setFont(QFont("Microsoft YaHei", 40))
+        self.test_result.setFont(QFont("Microsoft YaHei", 20))
         self.test_result.setAlignment(QtCore.Qt.AlignCenter)
 
     def show_tn4cio_ip(self):
         val = QTableWidgetItem(self.tn4cioip)
         self.table.setItem(0, 1, val)
-    
+
     def show_gatewayH10_ip(self):
         val = QTableWidgetItem(self.gateway_h10_ip)
         self.table.setItem(1, 1, val)
-
-    def show_printer_name(self):
-        val = QTableWidgetItem(self.pl2_printer_name)
-        self.table.setItem(2, 1, val)
 
     def show_produced_sensor_number_and_progress(self):
         ret = self.net.get_tested_sensors_info()
@@ -585,15 +530,12 @@ class AssemblyFunction(QDialog):
             result = text['result']
             if result == 'ok':
                 total = text['messages'][0]['total']
-                produced_num = text['messages'][0]['produced_num']
-                none_pair_num = text['messages'][0]['none_num']
-                fail_pair_num = text['messages'][0]['fail_num']
-                pass_pair_num = text['messages'][0]['psss_num']
+                tested = text['messages'][0]['iqa_tested']
 
-                item = QTableWidgetItem(str(produced_num))
+                item = QTableWidgetItem(str(tested))
                 self.table.setItem(1, 3, item)
 
-                process = int(produced_num)*100 // int(total)
+                process = int(tested)*100 // int(total)
                 self.show_po_process(process)
             else:
                 pass
@@ -628,7 +570,7 @@ class AssemblyFunction(QDialog):
 
     def show_initation_msg(self):
         self.info_show.setText("作业提示:")
-        self.info_show.append("请将待测试感应器置于测试治具上，并扫描右侧启动配对命令码开始测试")
+        self.info_show.append("请将待测试单板置于测试治具上，并扫描右侧启动配对命令码开始测试")
         self.info_show.append("(详情请参考SOP)")
 
     def show_qr_cmd_pair_start(self):
@@ -736,13 +678,46 @@ class AssemblyFunction(QDialog):
             pass
 
         self.info_show.setText("\n提示:")
-        self.info_show.append("确认功能测试失败，请将该感应器送至维修工站维修")
+        self.info_show.append("确认功能测试失败，请将该单板送至维修工站维修")
         self.info_show.append("然后扫描确认命令码开始下一台测试")
         self.info_show.append("(详情请参考SOP)")
         self.timer = QTimer()
         self.timer.setInterval(2000)
         self.timer.start()
         self.timer.timeout.connect(self.onTimerOut)
+
+    def exit_qa_testing(self):
+        if self.sensor_type == "DoorWindow":
+            self.doorwindow_sensor.exit_qa_longtime_testing()
+        elif self.sensor_type == "WaterLeakage":
+            self.waterleakage_sensor.exit_qa_longtime_testing()
+        elif self.sensor_type == "Temperature":
+            self.temperature_sensor.exit_qa_longtime_testing()
+        elif self.sensor_type == "MotionDetector":
+            # fixme
+            pass
+        else:
+            print("not support the sensor type!")
+            pass
+
+    def show_qr_cmd_exit_qa_test(self):
+        self.qr_cmd_name.setText("退出QA测试命令码")
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=6,
+            border=1,
+        )
+        qr.add_data('CMD_EXIT_QA_TEST')
+        qr.make(fit=True)
+        img = qr.make_image()
+        img_path = os.path.join(os.getcwd(), "CMD_EXIT_QA_TEST.png")
+        img.save(img_path)
+
+        if os.path.exists(img_path):
+            qr_cmd = QPixmap(img_path)
+            self.qr_cmd.setPixmap(qr_cmd)
+            os.remove(img_path)
 
     def show_sensor_info(self, info):
         self.sensor_info.setAlignment(QtCore.Qt.AlignLeft)
@@ -809,13 +784,13 @@ class AssemblyFunction(QDialog):
                 self.info_show.setText("门窗感应器配对成功, 即将开始功能测试...")
                 info = "名称: 门窗感应器\n\n" + "MAC: " + macaddress + "\n类型: " + model + "\n供应商: " + vendor + "\n时间: " + format_time
                 self.show_sensor_info(info)
-                val = "pass"
-                self.net.upload_pairTest_result(macaddress, val)
             elif msg == "waterleakage_sensor pairing done":
                 macaddress = text['macaddress']
                 model = text['model']
                 vendor = text['vendor']
                 timestamp = text['timestamp']
+                market_version = text['market_version']
+                # fixme
 
                 timeArray = time.localtime(int(timestamp) / 1000)
                 format_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
@@ -823,8 +798,6 @@ class AssemblyFunction(QDialog):
                 self.info_show.setText("水浸感应器配对成功")
                 info = "名称: 水浸感应器\n\n" + "MAC: " + macaddress + "\n类型: " + model + "\n供应商: " + vendor + "\n时间: " + format_time
                 self.show_sensor_info(info)
-                val = "pass"
-                self.net.upload_pairTest_result(macaddress, val)
                 self.show_qr_cmd_failed_confirm()
             elif msg == "temperature_sensor pairing done":
                 macaddress = text['macaddress']
@@ -839,7 +812,6 @@ class AssemblyFunction(QDialog):
                 self.info_show.setText("温度感应器配对成功，即将开始功能测试...")
                 info = "名称: 温度感应器\n\n" + "\nMAC: " + macaddress + "\n类型: " + model + "\n供应商: " + vendor + "\n时间: " + format_time + "\n温度: " + temperature
                 self.show_sensor_info(info)
-                self.net.upload_pairTest_result(macaddress, "pass")
             elif msg == "error not temperature sensor":
                 self.update_status_show("fail")
                 self.info_show.append("\n错误:")
@@ -857,7 +829,7 @@ class AssemblyFunction(QDialog):
             elif msg == "pre station done check fail":
                 self.update_status_show("fail")
                 self.info_show.append("\n警告:")
-                self.info_show.append("单板FTS测试未完成")
+                self.info_show.append("整机FTS测试未完成")
                 self.info_show.append("(10秒后自动恢复到初始状态)")
 
                 self.timer = QTimer()
@@ -911,20 +883,16 @@ class AssemblyFunction(QDialog):
                         deviceID) + " 方案:" + vendor + " 型号:" + model + " 状态:" + status)
                 self.show_qr_cmd_failed_confirm()
             elif msg == "doowwindow sensor function test success":
-                self.info_show.setText("功能测试通过，正在打印PL2条码")
-                self.info_show.append("打印完成后请将条码粘贴在感应器指定位置")
-                self.info_show.append("(详情请参考SOP)")
-
-                self.update_status_show("pass")
+                self.info_show.setText("功能测试通过，即将开始QA测试")
                 val = "pass"
                 macaddress = text['macaddress']
-                self.net.upload_functionTest_result(macaddress, val)
+                self.net.upload_iqa_to_tn4cio(macaddress, val)
                 self.show_produced_sensor_number_and_progress()
             elif msg == "comfirm doowwindow sensor function test failed":
                 self.update_status_show("fail")
                 val = "fail"
                 macaddress = text['macaddress']
-                self.net.upload_functionTest_result(macaddress, val)
+                self.net.upload_iqa_to_tn4cio(macaddress, val)
                 self.show_produced_sensor_number_and_progress()
             elif msg == "waterleakage sensor function test start":
                 self.info_show.setText("功能测试，请进行 浸水/干燥 测试")
@@ -973,34 +941,30 @@ class AssemblyFunction(QDialog):
                         deviceID) + " 方案:" + vendor + " 型号:" + model + " 状态:" + status)
                 self.show_qr_cmd_failed_confirm()
             elif msg == "waterleakage sensor function test success":
-                self.info_show.setText("功能测试通过，正在打印PL2条码")
-                self.info_show.append("打印完成后请将条码粘贴在感应器指定位置")
-                self.info_show.append("(详情请参考SOP)")
+                self.info_show.setText("功能测试通过，即将开始QA测试")
 
-                self.update_status_show("pass")
                 val = "pass"
                 mac = text['macaddress']
                 mac = mac.replace('0x', '').upper()
-                self.net.upload_functionTest_result(mac, val)
+                self.net.upload_iqa_to_tn4cio(mac, val)
                 self.show_produced_sensor_number_and_progress()
             elif msg == "waterleakage sensor user set function test failed":
                 self.update_status_show("fail")
                 val = "fail"
                 macaddress = text['macaddress']
-                self.net.upload_functionTest_result(macaddress, val)
+                self.net.upload_iqa_to_tn4cio(macaddress, val)
                 self.show_produced_sensor_number_and_progress()
             elif msg == "temperature sensor function test success":
-                self.update_status_show("pass")
-                macaddress = text['macaddress']
+                val = "pass"
+                mac = text['macaddress']
                 temperature = text['temperature']
                 reference = text['reference']
                 self.info_show.append(
-                    "\nMAC:" + macaddress + " 温度: " + temperature + " 参考值: " + reference + " 符合误差范围: " + self.TempRefRange)
-                self.net.upload_functionTest_result(macaddress, "pass")
-                self.net.upload_temperature_to_corelight(macaddress, temperature, reference)
+                    "\nMAC:" + mac + " 温度: " + temperature + " 参考值: " + reference + " 符合误差范围: " + self.TempRefRange)
+                self.net.upload_iqa_to_tn4cio(mac, val)
                 self.show_produced_sensor_number_and_progress()
             elif msg == "temperature sensor function test fail":
-                self.info_show.setText("功能测试失败，请将该感应器送至维修工站维修")
+                self.info_show.setText("功能测试失败，请将该单板送至维修工站维修")
                 self.info_show.append("(详情请参考SOP)")
                 self.update_status_show("fail")
                 self.show_qr_cmd_failed_confirm()
@@ -1010,39 +974,12 @@ class AssemblyFunction(QDialog):
                 reference = text['reference']
                 self.info_show.append(
                     "\nMAC: " + macaddress + " 温度: " + temperature + " 参考值: " + reference + " 误差范围大于设定值: " + self.TempRefRange)
-                self.net.upload_functionTest_result(macaddress, "fail")
-                self.net.upload_temperature_to_corelight(macaddress, temperature, reference)
+                self.net.upload_iqa_to_tn4cio(macaddress, "fail")
                 self.show_produced_sensor_number_and_progress()
-            elif msg == "start print PL2 label":
-                mac = text['macaddress']
-                self.printer.print_pl2_label(mac)
             elif msg == "sensor function test timeout":
                 self.info_show.setText("功能测试超时")
                 self.timer = QTimer()
                 self.timer.setInterval(2000)
-                self.timer.start()
-                self.timer.timeout.connect(self.onTimerOut)
-            elif msg == "printing PL2 label":
-                self.info_show.setText("正在打印PL2标签:\n")
-                self.info_show.append("打印完成后请将条码粘贴在感应器指定位置")
-                self.info_show.append("(详情请参考SOP)")
-            elif msg == "print PL2 label success":
-                self.info_show.setText("打印PL2标签完成:\n")
-
-                img = text['filepath']
-                preview = QImage(img, 'PNG')
-                cursor = self.info_show.textCursor()
-                cursor.movePosition(QTextCursor.End)
-                cursor.insertImage(preview)
-                self.timer = QTimer()
-                self.timer.setInterval(5000)
-                self.timer.start()
-                self.timer.timeout.connect(self.onTimerOut)
-            elif msg == "print PL2 label fail":
-                self.info_show.setText("错误:")
-                self.info_show.append("打印PL2标签失败")
-                self.timer = QTimer()
-                self.timer.setInterval(5000)
                 self.timer.start()
                 self.timer.timeout.connect(self.onTimerOut)
             elif msg == "reference temperature sensor pairing success":
@@ -1064,13 +1001,81 @@ class AssemblyFunction(QDialog):
             elif msg == "update reference tempreture value":
                 tempreture = text['tempreture']
                 self.show_Ref_temperature(tempreture)
+            elif msg == "doorwindow sensor qa longtime test starting":
+                self.info_show.setText("门窗感应器: QA测试")
+                self.show_qr_cmd_exit_qa_test()
+            elif msg == "doorwindow sensor qa testing info":
+                timestamp = text['timestamp']
+                macaddress = text['macaddress']
+                deviceID = text['deviceID']
+                vendor = text['vendor']
+                model = text['model']
+                status = text['status']
+
+                timeArray = time.localtime(int(timestamp) / 1000)
+                format_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+                self.info_show.append("时间:" + str(format_time) + " MAC:" + str(macaddress) + " 设备ID:" + str(
+                    deviceID) + " 方案:" + vendor + " 型号:" + model + " 状态: " + status)
+            elif msg == "exit doorwindow sensor qa testing":
+                self.info_show.setText("门窗感应器: 退出QA测试")
+                self.timer = QTimer()
+                self.timer.setInterval(1000)
+                self.timer.start()
+                self.timer.timeout.connect(self.onTimerOut)
+            elif msg == "waterleakage sensor qa longtime testing starting":
+                self.info_show.setText("水浸感应器: QA测试")
+                self.show_qr_cmd_exit_qa_test()
+            elif msg == "waterleakage sensor qa testing info":
+                timestamp = text['timestamp']
+                macaddress = text['macaddress']
+                deviceID = text['deviceID']
+                vendor = text['vendor']
+                model = text['model']
+                status = text['status']
+
+                timeArray = time.localtime(int(timestamp) / 1000)
+                format_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+                self.info_show.append("时间:" + str(format_time) + " MAC:" + str(macaddress) + " 设备ID:" + str(
+                    deviceID) + " 方案:" + vendor + " 型号:" + model + " 状态: " + status)
+            elif msg == "exit waterleakage sensor qa testing":
+                self.info_show.setText("水浸感应器: 退出QA测试")
+                self.timer = QTimer()
+                self.timer.setInterval(1000)
+                self.timer.start()
+                self.timer.timeout.connect(self.onTimerOut)
+            elif msg == "temperature sensor qa longtime testing starting":
+                self.info_show.setText("温度感应器: QA测试")
+                self.show_qr_cmd_exit_qa_test()
+            elif msg == "temperature sensor qa testing info":
+                timestamp = text['timestamp']
+                macaddress = text['macaddress']
+                deviceID = text['deviceID']
+                vendor = text['vendor']
+                model = text['model']
+                temperature = text['temperature']
+
+                timeArray = time.localtime(int(timestamp) / 1000)
+                format_time = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+                self.info_show.append("时间:" + str(format_time) + " MAC:" + str(macaddress) + " 设备ID:" + str(deviceID)
+                                      + " 方案:" + vendor + " 型号:" + model + " 温度: " + temperature + " 参考温度: " + self.RefTemperature)
+            elif msg == "exit temperature sensor qa testing":
+                self.info_show.setText("温度感应器: 退出QA测试")
+                self.timer = QTimer()
+                self.timer.setInterval(1000)
+                self.timer.start()
+                self.timer.timeout.connect(self.onTimerOut)
             else:
-                print("error: message not support!", msg)
-        except Exception as e:
-            print(e)
-            logging.debug(e)
+                print("message not support", msg)
+        except Exception:
+            pass
 
     def restart_asseblyfunction(self):
         if self.timer:
             self.timer.stop()
         self.init_data()
+
+    def stop_all_trhread(self):
+        try:
+            self.exit_qa_testing()
+        except Exception:
+            pass

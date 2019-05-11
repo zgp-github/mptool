@@ -1,6 +1,8 @@
 .vscode
 .pyc
 .spec
+venv
+.idea
 mptool_pyqt5.spec
 dist
 build

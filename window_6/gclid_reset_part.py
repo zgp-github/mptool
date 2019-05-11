@@ -4,7 +4,7 @@ import json
 import configparser
 import logging
 
-from station_gcl.net import network
+from window6.net import network
 
 class gclid_reset_part():
     def __init__(self):

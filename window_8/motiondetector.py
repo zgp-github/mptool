@@ -8,7 +8,7 @@ from time import sleep
 from time import localtime
 from time import strftime
 
-from station_iqa.gateway_h10 import GatewayH10
+from window8.gateway_h10 import GatewayH10
 
 
 class MotionDetectot():

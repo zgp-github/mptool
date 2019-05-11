@@ -49,13 +49,13 @@ from PyQt5.QtWidgets import QAbstractItemView
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import *
 
-from station_oqc.net import network
-from station_oqc.sensor_type import sensor_type
-from station_oqc.gateway_h10 import GatewayH10
-from station_oqc.doorwindow import DoorWindow
-from station_oqc.waterleakage import WaterLeakage
-from station_oqc.temperature import Temperature
-from station_oqc.motiondetector import MotionDetectot
+from window8.net import network
+from window8.sensor_type import sensor_type
+from window8.gateway_h10 import GatewayH10
+from window8.doorwindow import DoorWindow
+from window8.waterleakage import WaterLeakage
+from window8.temperature import Temperature
+from window8.motiondetector import MotionDetectot
 
 
 class FACTORY_OQC(QDialog):

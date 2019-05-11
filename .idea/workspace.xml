@@ -2,10 +2,53 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1de9e27b-e55a-4ba5-b126-5cd7954ccb52" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/mptool4pc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/station_pcbafts/fts_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/window_2/fts_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station_pcbafts/net.py" beforeDir="false" afterPath="$PROJECT_DIR$/window_2/net.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station_pcbafts/pcbafts.py" beforeDir="false" afterPath="$PROJECT_DIR$/window_2/window2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mptool.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mptool.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/window3/assemblyfts.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window3/fts_data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window3/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/assemblyfunction.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/doorwindow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/gateway_h10.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/motiondetector.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/pl2_printer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/sensor_type.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/temperature.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/test1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/test2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/ut331.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window4/waterleakage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window5/ml1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window5/ml1_printer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window5/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/cartoning.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/gcl.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/gcl_printer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/gclid_reprint.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/gclid_reset_all.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/gclid_reset_part.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window6/weighter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/doorwindow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/gateway_h10.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/iqa.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/motiondetector.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/sensor_type.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/temperature.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window7/waterleakage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/doorwindow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/gateway_h10.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/motiondetector.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/net.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/oqc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/sensor_type.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/temperature.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/window8/waterleakage.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,59 +56,16 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1492846103">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="ini" value="2" />
-          <entry key="py" value="8" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Ini" value="2" />
-          <entry key="Python" value="8" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="dummy" value="7" />
-          <entry key="py" value="135" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="PLAIN_TEXT" value="7" />
-          <entry key="Python" value="135" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
-              <caret line="97" column="57" lean-forward="true" selection-start-line="97" selection-start-column="57" selection-end-line="97" selection-end-column="57" />
+            <state relative-caret-position="264">
+              <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
               <folding>
                 <element signature="e#24#34#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.ini">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -73,11 +73,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/window_2/window2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
-              <folding>
-                <element signature="e#24#34#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="550">
+              <caret line="34" column="33" lean-forward="true" selection-start-line="34" selection-start-column="33" selection-end-line="34" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -85,47 +82,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/window_1/window1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="43" column="13" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/station_oqc/temperature.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="101" column="26" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/station_oqc/waterleakage.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="209" selection-start-line="209" selection-end-line="209" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/station_oqc/oqc.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2132">
-              <caret line="1045" column="47" selection-start-line="1045" selection-start-column="47" selection-end-line="1045" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/station_gcl/weighter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
-              <caret line="60" column="63" selection-start-line="60" selection-end-line="61" />
+            <state relative-caret-position="330">
+              <caret line="64" column="33" lean-forward="true" selection-start-line="64" selection-start-column="33" selection-end-line="64" selection-end-column="33" />
               <folding>
-                <element signature="e#24#33#0" expanded="true" />
+                <element signature="e#24#34#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -136,6 +106,7 @@
     <findStrings>
       <find>self.station</find>
       <find>parser_config</find>
+      <find>MainPage</find>
     </findStrings>
     <replaceStrings>
       <replace>self.window_conf</replace>
@@ -149,14 +120,15 @@
       <list>
         <option value="$PROJECT_DIR$/window_2/window2.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-389" />
-    <option name="y" value="-1219" />
-    <option name="width" value="1346" />
-    <option name="height" value="688" />
+    <option name="x" value="-265" />
+    <option name="y" value="-1208" />
+    <option name="width" value="1936" />
+    <option name="height" value="1176" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -171,21 +143,6 @@
               <item name="mptool" type="b2602c69:ProjectViewProjectNode" />
               <item name="mptool" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="mptool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mptool" type="462c0819:PsiDirectoryNode" />
-              <item name="station_assemblyfts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mptool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mptool" type="462c0819:PsiDirectoryNode" />
-              <item name="window_1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mptool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mptool" type="462c0819:PsiDirectoryNode" />
-              <item name="window_2" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -194,7 +151,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.gutterIcons" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -253,87 +210,31 @@
     <frame x="-265" y="-1208" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973601" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.125132" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.27005872" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32093933" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.15527344" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3293919" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/station_oqc/temperature.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="101" column="26" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mptool4pc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4202">
-          <caret line="191" column="12" selection-start-line="191" selection-start-column="12" selection-end-line="191" selection-end-column="12" />
-          <folding>
-            <element signature="e#24#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/station_gcl/weighter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="60" column="63" selection-start-line="60" selection-end-line="61" />
-          <folding>
-            <element signature="e#24#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/station_oqc/oqc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2132">
-          <caret line="1045" column="47" selection-start-line="1045" selection-start-column="47" selection-end-line="1045" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/window_1/window1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="43" column="13" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/window_2/window2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
-          <folding>
-            <element signature="e#24#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/station_oqc/waterleakage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="209" selection-start-line="209" selection-end-line="209" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/window8/temperature.py" />
+    <entry file="file://$PROJECT_DIR$/mptool4pc.py" />
+    <entry file="file://$PROJECT_DIR$/window6/weighter.py" />
+    <entry file="file://$PROJECT_DIR$/window8/oqc.py" />
+    <entry file="file://$PROJECT_DIR$/window8/waterleakage.py" />
     <entry file="file://$PROJECT_DIR$/config.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -341,13 +242,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/window_2/window2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="34" column="33" lean-forward="true" selection-start-line="34" selection-start-column="33" selection-end-line="34" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="97" column="57" lean-forward="true" selection-start-line="97" selection-start-column="57" selection-end-line="97" selection-end-column="57" />
+        <state relative-caret-position="264">
+          <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
           <folding>
             <element signature="e#24#34#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/window_1/window1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="64" column="33" lean-forward="true" selection-start-line="64" selection-start-column="33" selection-end-line="64" selection-end-column="33" />
+          <folding>
+            <element signature="e#24#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
         </state>
       </provider>
     </entry>

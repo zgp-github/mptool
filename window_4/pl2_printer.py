@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
 import configparser
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtGui import QImage
-from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import QObject
-from PyQt5.QtPrintSupport import QPrinterInfo
-from PyQt5.QtPrintSupport import QPrinter
-
 from time import sleep
 from urllib.request import urlretrieve
 from urllib.request import urlcleanup
-from station_ml1.net import network
+from PyQt5 import QtCore
+from PyQt5.QtCore import QObject
+from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QPainter
+
+from PyQt5.QtPrintSupport import QPrinterInfo
+from PyQt5.QtPrintSupport import QPrinter
+
+from window4.assemblyfunction import network
 
 
 class Printer(QObject):
@@ -20,36 +20,37 @@ class Printer(QObject):
 
     def __init__(self, parent=None):
         super(Printer, self).__init__(parent)
-        self.ml1_printer = None
         self.corelight = None
         self.download_percent = 0
+        self.pl2_printer = None
         self.init_data()
 
     def init_data(self):
+        self.parser_config()
         self.corelight = network()
-        self.read_config()
 
-    def read_config(self):
-        config = 'config.ini'
-        conf = configparser.ConfigParser()
-        if os.path.exists(config):
-            conf.read(config)
-            self.ml1_printer = conf.get('Printer', 'ml1_printer')
-        print("ml1 printer:", self.ml1_printer)
+    def parser_config(self):
+        file = 'config.ini'
+        filepath = os.path.join(os.getcwd(), file)
+        if os.path.exists(filepath):
+            conf = configparser.ConfigParser()
+            conf.read(filepath)
+            self.pl2_printer = conf.get('Printer', 'pl2_printer')
+        print("pl2 printer:", self.pl2_printer)
 
     def list(self):
         printer = []
-        printerInfo = QPrinterInfo()
-        for item in printerInfo.availablePrinters():
+        printer_info = QPrinterInfo()
+        for item in printer_info.availablePrinters():
             printer.append(item.printerName())
         print("printer list:", printer)
         return printer
 
     def printing(self, file):
-        printer = self.ml1_printer
-        printerinfo = QPrinterInfo()
+        printer = self.pl2_printer
+        printer_info = QPrinterInfo()
         p = QPrinter()
-        for item in printerinfo.availablePrinters():
+        for item in printer_info.availablePrinters():
             if printer == item.printerName():
                 p = QPrinter(item)
 
@@ -66,29 +67,31 @@ class Printer(QObject):
         painter.drawImage(0, 0, image)
         painter.end()
 
-    def print_ml1_label(self, macaddress):
+    def print_pl2_label(self, macaddress):
         mac = macaddress
+        data = {"message": "printing PL2 label"}
+        self._signal_printer.emit(data)
+        sleep(0.5)
         try:
-            url = self.corelight.get_ml1_download_url(mac)
+            url = self.corelight.get_pl2_label_download_url(mac)
             filename = os.path.basename(url)
             filepath = os.path.join(os.getcwd(), filename)
             urlretrieve(url, filepath, self.download_callback)
-            print("download ml1:", url, filename, filepath)
+            print("download pl2:", url, filename, filepath)
 
             if self.download_percent == 100:
-                data = {"message": "print ML1 label success", "filepath": filepath}
-                self._signal_printer.emit(data)
-                sleep(0.1)
                 self.download_percent = 0
+
+            if os.path.exists(filepath):
                 self.printing(filepath)
                 sleep(0.1)
-
-                if os.path.exists(filepath):
-                    sleep(0.5)
-                    os.unlink(filepath)
+                data = {"message": "print PL2 label success", "filepath": filepath}
+                self._signal_printer.emit(data)
+                sleep(0.5)
+                os.unlink(filepath)
         except Exception as e:
             print(e)
-            data = {"message": "print ML1 label fail"}
+            data = {"message": "print PL2 label fail"}
             self._signal_printer.emit(data)
         finally:
             urlcleanup()

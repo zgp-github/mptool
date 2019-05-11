@@ -44,8 +44,8 @@ from PyQt5.QtWidgets import QMenuBar
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import *
 
-from station_ml1.net import network
-from station_ml1.ml1_printer import Printer
+from window5.net import network
+from window5.ml1_printer import Printer
 
 
 class ML1(QDialog):
